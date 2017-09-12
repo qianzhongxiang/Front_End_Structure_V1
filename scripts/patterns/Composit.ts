@@ -1,4 +1,5 @@
-/// <reference path="../utilities/Guid.ts" />
+/// <reference path="../Utilities/Guid.ts" />
+/// <reference path="../Utilities/ArrayEx.ts" />
 
 namespace Patterns {
     export interface IComposit {
@@ -20,10 +21,15 @@ namespace Patterns {
             return Obj;
         }
         public Remove(Obj: IComposit): IComposit {
+            if (!Obj) return;
             return this.Children.splice(this.Children.indexOf(Obj), 1)[0];
         }
         public GetChild(id: string): IComposit {
-            return this.Children.find(c => c.Id == id);
+            if (!Utilities.Guid.Validate(id)) {
+                console.log("id:" + id + " is not valid Guid ");
+                return;
+            }
+            return this.Children.firstOrDefault(c => c.Id == id);
         }
         public Destroy() {
             if (this.Parent) {
@@ -31,7 +37,7 @@ namespace Patterns {
                 delete this.Parent;
             }
             if (this.Children) {
-                this.Children.forEach(c => {c.Parent=undefined;c.Destroy();});
+                this.Children.forEach(c => { c.Parent = undefined; c.Destroy(); });
                 delete this.Children;
             }
         }

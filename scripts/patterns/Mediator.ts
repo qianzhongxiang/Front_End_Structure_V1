@@ -1,3 +1,4 @@
+///<reference path="../DataStructures/LinkList.ts"/>
 namespace Patterns{
     export interface IMediator{
         Register(subject,fn:Function,type?)

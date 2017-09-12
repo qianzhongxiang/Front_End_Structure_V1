@@ -1,3 +1,4 @@
+///<reference path="Extend.ts"/>
 interface Array<T> {
     distinct(fn?: (obj: T) => number | string): Array<T>
     //select(fn: (obj) => any): Array<any>
@@ -65,7 +66,7 @@ if (!Array.prototype.extends)
         let o: Object = {}, a = [], i, e, all = this.concat(targets);
         for (i = 0; e = all[i]; i++) {
             let n = fn ? fn(e) : all[i];
-            o[n] = o[n] ? (extendsMathod || $.extend)(o[n], e) : e
+            o[n] = o[n] ? (extendsMathod || Utilities.Extend)(o[n], e) : e
         }
         for (i in o) { if (o.hasOwnProperty(i)) a.push(o[i]) }
         return a;
