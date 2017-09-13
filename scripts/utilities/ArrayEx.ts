@@ -1,4 +1,3 @@
-///<reference path="Extend.ts"/>
 interface Array<T> {
     distinct(fn?: (obj: T) => number | string): Array<T>
     //select(fn: (obj) => any): Array<any>
@@ -61,16 +60,16 @@ if (!Array.prototype.firstOrDefault)
         let i, e;
         for (i = 0; e = this[i]; i++)if (fn(e)) return e
     }
-if (!Array.prototype.extends)
-    Array.prototype.extends = function (targets, fn, extendsMathod?) {
-        let o: Object = {}, a = [], i, e, all = this.concat(targets);
-        for (i = 0; e = all[i]; i++) {
-            let n = fn ? fn(e) : all[i];
-            o[n] = o[n] ? (extendsMathod || Utilities.Extend)(o[n], e) : e
-        }
-        for (i in o) { if (o.hasOwnProperty(i)) a.push(o[i]) }
-        return a;
-    }
+// if (!Array.prototype.extends)
+//     Array.prototype.extends = function (targets, fn, extendsMathod?) {
+//         let o: Object = {}, a = [], i, e, all = this.concat(targets);
+//         for (i = 0; e = all[i]; i++) {
+//             let n = fn ? fn(e) : all[i];
+//             o[n] = o[n] ? (extendsMathod || Extend)(o[n], e) : e
+//         }
+//         for (i in o) { if (o.hasOwnProperty(i)) a.push(o[i]) }
+//         return a;
+//     }
 if (!Array.prototype.sum)
     Array.prototype.sum = function (fn: (obj) => number) {
         let sum = 0, i, e

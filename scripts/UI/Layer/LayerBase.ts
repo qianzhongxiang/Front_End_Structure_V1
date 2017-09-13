@@ -1,13 +1,10 @@
-/// <reference path="../Widget.ts" />
+import { Widget } from "../Widget";
 
-namespace UI.Layer{
-    export abstract class LayerBase extends Widget {
-        public Open()
-        {
-            this.Wrapper.style.display="block";
-        }
-        public Close(){
-            this.Wrapper.style.display="none";
-        }
+export abstract class LayerBase extends Widget {
+    public Open() {
+        this.Wrapper.style.display = "block";
+    }
+    public Close() {
+        this.Wrapper.style.display = "none";
     }
 }

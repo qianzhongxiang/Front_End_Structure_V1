@@ -1,8 +1,6 @@
-/// <reference path="../Widget.ts"/>
-namespace UI.Layer{
-    export class  Dialog extends Widget
-    {
-        protected defaultOptions
-        
-    }
+import { Widget } from "../Widget";
+
+export class Dialog extends Widget {
+    protected defaultOptions
+
 }
