@@ -1,5 +1,4 @@
 import * as Utilities from './../Utilities/Guid';
-import {  } from "./../Utilities/ArrayEx";
 
 export interface IComposit {
     Id: string //Guid
@@ -12,7 +11,7 @@ export interface IComposit {
 export abstract class Composit implements IComposit {
     public Id: string
     public Parent: IComposit
-    private Children: Array<IComposit>
+    private Children: Array<IComposit>=[]
     public Add(Obj: IComposit): IComposit {
         Obj.Parent = Obj;
         if (!this.GetChild(Obj.Id))
@@ -28,7 +27,7 @@ export abstract class Composit implements IComposit {
             console.log("id:" + id + " is not valid Guid ");
             return;
         }
-        return this.Children.firstOrDefault(c => c.Id == id);
+        return this.Children.filter(c => c.Id == id)[0];
     }
     public Destroy() {
         if (this.Parent) {

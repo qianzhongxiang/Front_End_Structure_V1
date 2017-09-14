@@ -1,12 +1,15 @@
 import * as Patterns from '../Patterns/Composit';
 import * as Utilities from './../Utilities/Extend';
-export class Widget extends Patterns.Composit {
-    protected DefaultOptions
+export class VinciWidget<OptionsT> extends Patterns.Composit {
+    protected get DefaultOptions():any{
+        return {};
+    }
     public Wrapper: HTMLElement
-    constructor(public Element: HTMLElement, public Options = {}) {
+    constructor(public Element: HTMLElement, public Options:OptionsT = {} as OptionsT) {
         super();
         this.Wrapper = this.Element;
         Utilities.Extend(this.Options, this.DefaultOptions)
+        this.Initialization();
     }
     /**
      * need to satisfiy rebuiding of widget.

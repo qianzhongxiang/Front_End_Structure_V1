@@ -9,7 +9,7 @@ interface Array<T> {
     /**
         * js raw findIndex mathod is never supported by IE
         */
-    findIndex(fn: (obj: T) => boolean): number
+    findIndex(predicate: (this: void, value: T, index: number, obj: Array<T>) => boolean): number
 }
 
 
@@ -77,7 +77,8 @@ if (!Array.prototype.sum)
         return sum;
     }
 if (!Array.prototype.findIndex)
-    Array.prototype.findIndex = function (fn: (obj) => boolean) {
+    Array.prototype.findIndex = function (predicate: (this: void, value, index?: number, obj?: Array<any>) => boolean) {
         let i, e;
-        for (i = 0; e = this[i]; i++)if (fn(e)) return i; return -1;
+        for (i = 0; e = this[i]; i++)if (predicate(e)) return i; return -1;
     }
+

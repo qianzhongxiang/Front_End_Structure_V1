@@ -1,8 +1,8 @@
 {
     "compilerOptions": {
         "target": "es5",
-        "module":"ES6",
+        "module":"AMD",
         "sourceMap": true
     },
-    "files":["../scripts/UI/Layer/ModalLayer.ts"]
+    "files":["../scripts/UI/Layer/VinciModalLayer.ts","../scripts/UI/Layer/VinciWindow.ts"]
 }
