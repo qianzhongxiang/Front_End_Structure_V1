@@ -12,7 +12,6 @@ export class VinciWindow extends VinciLayerBase<IVinciWindowOptions> {
         return { AutoDestory: true, Title: "My modal Window" }; //,Align:"center"
     }
     constructor(element: HTMLDivElement, options?: IVinciWindowOptions) {
-        let ele = element;
         super(element, options)
     }
     /**

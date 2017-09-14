@@ -17,4 +17,8 @@ export class VinciWidget<OptionsT> extends Patterns.Composit {
     protected Initialization() {
 
     }
+    protected SetOptions(options:OptionsT){
+        Utilities.Extend(this.Options=options, this.DefaultOptions)  
+        this.Initialization();      
+    }
 }
