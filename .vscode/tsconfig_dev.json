@@ -4,5 +4,7 @@
         "module":"AMD",
         "sourceMap": true
     },
-    "files":["../scripts/UI/Layer/VinciModalLayer.ts","../scripts/UI/Layer/VinciWindow.ts"]
+    "files":["../scripts/UI/Layer/VinciModalLayer.ts"
+        ,"../scripts/UI/Layer/VinciWindow.ts"
+    ,"../scripts/UI/Editor/VinciDropDownList.ts"]
 }
