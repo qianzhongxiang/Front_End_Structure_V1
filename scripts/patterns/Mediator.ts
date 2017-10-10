@@ -10,13 +10,13 @@ class MediaNode extends DS.LNode {
 }
 export abstract class Mediator implements IMediator {
     private Storage: Array<[string, DS.LinkList<MediaNode>]>
-    Register(subject: any, fn: Function, type?: any) {
+    Register(id: string, fn: Function, type?: any) {
         throw new Error("Method not implemented.");
     }
-    Change(subject: any, type?: any) {
+    Change(id: string, type?: any) {
         throw new Error("Method not implemented.");
     }
-    Unregister(subject: any, fn: Function, type?: any) {
+    Unregister(id: string, fn: Function, type?: any) {
         throw new Error("Method not implemented.");
     }
 }
