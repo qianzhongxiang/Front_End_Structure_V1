@@ -3,6 +3,7 @@ export class LNode {
     Next: LNode
 }
 export class LinkList<T extends LNode> {
+    public Id: string
     private HeadNode: LNode = new LNode()
     private EndHandle: LNode
     constructor() {
@@ -15,8 +16,10 @@ export class LinkList<T extends LNode> {
         if (!node) return;
         if (!this.EndHandle)
             this.HeadNode.Next = this.EndHandle = node;
-        else
+        else {
             this.EndHandle.Next = node;
+            this.EndHandle = node;
+        }
         this.HeadNode.Data++;
         return node;
     }
@@ -84,6 +87,13 @@ export class LinkList<T extends LNode> {
                 return inNode;
             }
             preNode = node;
+        }
+    }
+    public ForEach(fn: (node: T) => void) {
+        if (!fn) return;
+        let node = this.HeadNode, result: T[] = [];
+        while (node = node.Next) {
+            fn(node as T)
         }
     }
 }

@@ -9,14 +9,26 @@ class MediaNode extends DS.LNode {
     public Type: string
 }
 export abstract class Mediator implements IMediator {
-    private Storage: Array<[string, DS.LinkList<MediaNode>]>
+    private Storage: Array<DS.LinkList<MediaNode>>=[]
     Register(id: string, fn: Function, type?: any) {
-        throw new Error("Method not implemented.");
+       let item= this.Storage.filter(s=>s.Id===id)[0];
+       if(!item){
+        this.Storage.push(item=new DS.LinkList<MediaNode>());
+       }
+       let newItem=new MediaNode();
+       newItem.Type=type;
+       newItem.Data=fn;
+       item.Add(newItem);
     }
     Change(id: string, type?: any) {
-        throw new Error("Method not implemented.");
+        let item= this.Storage.filter(s=>s.Id===id)[0];
+        item.ForEach(i=>{
+            if(type&&i.Type!=type)return;
+            (i.Data as Function)();
+        })
     }
     Unregister(id: string, fn: Function, type?: any) {
-        throw new Error("Method not implemented.");
+        let item= this.Storage.filter(s=>s.Id===id)[0];
+        if(item) item.Del_ByData(fn);
     }
 }

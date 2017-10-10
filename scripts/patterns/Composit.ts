@@ -40,8 +40,4 @@ export abstract class Composit extends ObserverableWMediator implements IComposi
             delete this.Children;
         }
     }
-    constructor() {
-        super();
-        this.Id = Utilities.Guid.NewId();
-    }
 }

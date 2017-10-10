@@ -2,14 +2,14 @@ import { Mediator } from "./Mediator";
 import { ObserverStateType, Observerable, ObserverMsg } from './Observerable';
 
 class ObserMediator extends Mediator {
-    Register(subject: ObserverableWMediator, fn: Function, type?: any) {
-        super.Register(subject, fn, type)
+    Register(subject: string|ObserverableWMediator, fn: Function, type?: any) {
+       super.Register(typeof subject ==="string"?subject: subject.Id, fn, type)
     }
-    Change(subject: ObserverableWMediator, type?: any) {
-        super.Change(subject, type)
+    Change(subject:  string|ObserverableWMediator, type?: any) {
+        super.Change(typeof subject ==="string"?subject: subject.Id, type)
     }
-    Unregister(subject: ObserverableWMediator, fn: Function, type?: any) {
-        super.Register(subject, fn, type)
+    Unregister(subject:  string|ObserverableWMediator, fn: Function, type?: any) {
+        super.Register(typeof subject ==="string"?subject: subject.Id,fn, type)
     }
 }
 let mediator=new ObserMediator();
@@ -28,10 +28,20 @@ export class ObserverableWMediator extends Observerable {
             }
         }
     }
-    public Bind(type: ObserverStateType, fn: (msg: ObserverMsg, ...parameters: any[]) => void, ownObj?: Object, ...otherData: any[]) {
+    /**
+     * Bind [, ownObj?: Object, ...otherData: any[]]可直接对fn进行bind
+     * @param type 
+     * @param fn 
+     */
+    public Bind(type: ObserverStateType, fn: (msg: ObserverMsg, ...parameters: any[]) => void) {
         mediator.Register(this,fn,type)
     }
-    public Once(type: ObserverStateType, fn: (msg: ObserverMsg, ...parameters: any[]) => void, ownObj?: Object, ...otherData: any[]) {
-        throw new Error("Method not implemented.");
+    /**
+     * Once [, ownObj?: Object, ...otherData: any[]]可直接对fn进行bind
+     * @param type 
+     * @param fn 
+     */
+    public Once(type: ObserverStateType, fn: (msg: ObserverMsg, ...parameters: any[]) => void) {
+        mediator.Register(this,fn,type)
     }
 }

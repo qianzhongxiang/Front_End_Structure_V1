@@ -1,3 +1,5 @@
+import * as Utilities from './../Utilities/Guid';
+
 export enum ObserverStateType {
 }
 export class ObserverMsg {
@@ -11,7 +13,16 @@ export interface IObseverable {
     Once(type: ObserverStateType, fn: (msg: ObserverMsg, ...parameters: any[]) => void, ownObj?: Object, ...otherData: any[])
 }
 export abstract class Observerable implements IObseverable {
+    public Id:string
+    constructor(){
+        this.Id = Utilities.Guid.NewId();
+    }
     protected StateTable:Array<{type:ObserverStateType,value?:any}>=[]
+    /**
+     * 设置状态 如果有改变 会自动notice
+     * @param type 
+     * @param value 
+     */
     protected SetState(type: ObserverStateType,value?:any) {
         if(value){
             let state=this.StateTable.filter(s=>s.type==type)[0];
