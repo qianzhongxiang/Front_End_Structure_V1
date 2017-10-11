@@ -1,12 +1,11 @@
 import * as Patterns from '../Patterns/Composit';
-
 /**
  * Draggable; this is a container 
  */
 export class Draggable extends Patterns.Composit {
     public Span: number = 12
     private DragStartEvent
-    constructor(public Element: HTMLDivElement, private component?: { Element: HTMLElement, Destroy?: () => void }) {
+    constructor(public Element: HTMLElement, private component?: { Element: HTMLElement, Destroy?: () => void }) {
         super()
         this.Element.draggable = true;
         this.Element.addEventListener("dragstart", this.DragStartEvent = this.Dragstart.bind(this));
@@ -16,10 +15,8 @@ export class Draggable extends Patterns.Composit {
             if (this.component.Destroy) this.component.Destroy();
             delete this.component;
         }
-        var components = this.Element.getElementsByClassName("");
-        components.forEach(c => {
-            //Destroy c
-        });
+        var components = this.Element.querySelectorAll("");//TODO destory them
+
         super.Destroy();
     }
     private Dragstart(e: DragEvent) {
@@ -37,9 +34,15 @@ export class Draggable extends Patterns.Composit {
 
     }
 }
+
 export class DraggableToolbar extends Patterns.Composit {
     private Button: HTMLButtonElement
     private RemoveArea: HTMLDivElement
+    public Events={
+        OnEdit:"OnEdit",
+        OnSave:"OnSave",
+        OnDroped:"OnDroped",
+    }
     constructor(public Element: HTMLDivElement) {
         super();
         this.Initialize();
@@ -57,18 +60,20 @@ export class DraggableToolbar extends Patterns.Composit {
                     btn.classList.remove("btn-primary");
                     btn.classList.add("btn-success");
                     btn.innerText = "Save";
+                    this.SetState(this.Events.OnEdit)
                 } else {
                     this.SaveScript();
                     btn.classList.remove("btn-success");
                     btn.classList.add("btn-primary");
                     btn.innerText = "Edit";
+                    this.SetState(this.Events.OnSave)
                 }
             }
             this.Button.classList.add("btn");
             this.Button.classList.add("btn-primary");
             this.Button.classList.add("float-left");
+            this.Element.appendChild(this.Button);
         }
-
     }
     public SaveScript(){
 
@@ -145,8 +150,9 @@ export class DraggableContainer extends Patterns.Composit {
      */
     public ShowAndCreateRow(): boolean {
         //existing layer show --done
-        let rows = this.Element.getElementsByClassName("row"), ext = new RegExp(/[col-\d+,col-sm-\d,col-md-\d,col-lg-\d,col-xl-\d]/);
-        rows.forEach(r => {
+        let rows = this.Element.getElementsByClassName("row"), ext = new RegExp(/[col-\d+,col-sm-\d,col-md-\d,col-lg-\d,col-xl-\d]/),len=rows.length;
+        for (var index = 0; index < len; index++) {
+            var r = rows[index];
             let sign = 0, subDiv = r.firstChild as HTMLDivElement, arry = [];
             while (subDiv) {
                 arry.push(subDiv);
@@ -162,10 +168,9 @@ export class DraggableContainer extends Patterns.Composit {
                     if (subDiv)
                         r.insertBefore(newDiv, subDiv);
                     else r.appendChild(newDiv);
-                }
+                } 
             }
-        });
-
+        }
         //create new layer --done
         while (this.Element.getElementsByClassName("empty").length < 2) {
             let div = document.createElement("div");

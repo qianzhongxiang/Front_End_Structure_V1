@@ -9,6 +9,7 @@ export interface IComposit {
     GetChild(id: string): IComposit
     Destroy()
 }
+
 export abstract class Composit extends ObserverableWMediator implements IComposit {
     public Id: string
     public Parent: IComposit

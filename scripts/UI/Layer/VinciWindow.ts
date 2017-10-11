@@ -1,17 +1,17 @@
 import { VinciLayerBase } from './VinciLayerBase';
 import { VinciModalLayer } from "./VinciModalLayer";
 
-export interface IVinciWindowOptions {
+export interface IVinciWindowOptions  {
     AutoDestory?: boolean
     Title?: string
     // Align?:string
 }
-export class VinciWindow extends VinciLayerBase<IVinciWindowOptions> {
+export class VinciWindow<OptionsT extends IVinciWindowOptions> extends VinciLayerBase<OptionsT> {
     public MODELLAYER: string;
     protected get DefaultOptions(): IVinciWindowOptions {
         return { AutoDestory: true, Title: "My modal Window" }; //,Align:"center"
     }
-    constructor(element: HTMLDivElement, options?: IVinciWindowOptions) {
+    constructor(element: HTMLDivElement, options?: OptionsT) {
         super(element, options)
     }
     /**
@@ -68,12 +68,12 @@ export class VinciWindow extends VinciLayerBase<IVinciWindowOptions> {
         return foot;
     }
     public Open() {
-        (this.GetChild(this.MODELLAYER) as VinciModalLayer).Open();
+        (this.GetChild(this.MODELLAYER) as VinciModalLayer<any>).Open();
         super.Open();
     }
     public Close() {
         super.Close();
-        (this.GetChild(this.MODELLAYER) as VinciModalLayer).Close();
+        (this.GetChild(this.MODELLAYER) as VinciModalLayer<any>).Close();
         if (this.Options.AutoDestory) this.Destroy();
     }
 }

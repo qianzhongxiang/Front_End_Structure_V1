@@ -1,5 +1,4 @@
 import { VinciWidget } from './../VinciWidget';
-
 export abstract class VinciEditorBase<OptionsT> extends VinciWidget<OptionsT> {
     protected GetValue(): any {
         return this.Element.dataset.value;

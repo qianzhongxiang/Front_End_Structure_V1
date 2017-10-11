@@ -1,29 +1,27 @@
 import * as Utilities from './../Utilities/Guid';
 
-export enum ObserverStateType {
-}
 export class ObserverMsg {
     public Sender: IObseverable
-    public Type: ObserverStateType
+    public Type: string
     public Value: any
 }
 export interface IObseverable {
-    GetState(type: ObserverStateType);
-    Bind(type: ObserverStateType, fn: (msg: ObserverMsg, ...parameters: any[]) => void, ownObj?: Object, ...otherData: any[])
-    Once(type: ObserverStateType, fn: (msg: ObserverMsg, ...parameters: any[]) => void, ownObj?: Object, ...otherData: any[])
+    GetState(type: string);
+    Bind(type: string, fn: (msg: ObserverMsg, ...parameters: any[]) => void, ownObj?: Object, ...otherData: any[])
+    Once(type: string, fn: (msg: ObserverMsg, ...parameters: any[]) => void, ownObj?: Object, ...otherData: any[])
 }
 export abstract class Observerable implements IObseverable {
     public Id:string
-    constructor(){
+    constructor() {
         this.Id = Utilities.Guid.NewId();
     }
-    protected StateTable:Array<{type:ObserverStateType,value?:any}>=[]
+    protected StateTable:Array<{type:string,value?:any}>=[]
     /**
      * 设置状态 如果有改变 会自动notice
      * @param type 
      * @param value 
      */
-    protected SetState(type: ObserverStateType,value?:any) {
+    protected SetState(type: string,value?:any) {
         if(value){
             let state=this.StateTable.filter(s=>s.type==type)[0];
             if(state){
@@ -36,14 +34,14 @@ export abstract class Observerable implements IObseverable {
             }
         }
     }
-    public GetState(type: ObserverStateType) {
+    public GetState(type: string) {
         let state=this.StateTable.filter(s=>s.type==type)[0];
         if(state)return state.value;
     }
-    public Bind(type: ObserverStateType, fn: (msg: ObserverMsg, ...parameters: any[]) => void, ownObj?: Object, ...otherData: any[]) {
+    public Bind(type: string, fn: (msg: ObserverMsg, ...parameters: any[]) => void, ownObj?: Object, ...otherData: any[]) {
         throw new Error("Method not implemented.");
     }
-    public Once(type: ObserverStateType, fn: (msg: ObserverMsg, ...parameters: any[]) => void, ownObj?: Object, ...otherData: any[]) {
+    public Once(type: string, fn: (msg: ObserverMsg, ...parameters: any[]) => void, ownObj?: Object, ...otherData: any[]) {
         throw new Error("Method not implemented.");
     }
 }

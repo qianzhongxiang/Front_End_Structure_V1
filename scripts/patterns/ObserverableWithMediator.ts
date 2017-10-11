@@ -1,5 +1,5 @@
 import { Mediator } from "./Mediator";
-import { ObserverStateType, Observerable, ObserverMsg } from './Observerable';
+import { Observerable, ObserverMsg } from './Observerable';
 
 class ObserMediator extends Mediator {
     Register(subject: string|ObserverableWMediator, fn: Function, type?: any) {
@@ -15,7 +15,7 @@ class ObserMediator extends Mediator {
 let mediator=new ObserMediator();
 
 export class ObserverableWMediator extends Observerable {
-    protected SetState(type: ObserverStateType,value?:any){
+    protected SetState(type: string,value?:any){
         if(value){
             let state=this.StateTable.filter(s=>s.type==type)[0];
             if(state){
@@ -26,6 +26,8 @@ export class ObserverableWMediator extends Observerable {
             }else{this.StateTable.push(state);
                 mediator.Change(this,type);
             }
+        }else{
+            mediator.Change(this,type);
         }
     }
     /**
@@ -33,7 +35,7 @@ export class ObserverableWMediator extends Observerable {
      * @param type 
      * @param fn 
      */
-    public Bind(type: ObserverStateType, fn: (msg: ObserverMsg, ...parameters: any[]) => void) {
+    public Bind(type: string, fn: (msg: ObserverMsg, ...parameters: any[]) => void) {
         mediator.Register(this,fn,type)
     }
     /**
@@ -41,7 +43,7 @@ export class ObserverableWMediator extends Observerable {
      * @param type 
      * @param fn 
      */
-    public Once(type: ObserverStateType, fn: (msg: ObserverMsg, ...parameters: any[]) => void) {
+    public Once(type: string, fn: (msg: ObserverMsg, ...parameters: any[]) => void) {
         mediator.Register(this,fn,type)
     }
 }

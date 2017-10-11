@@ -22,6 +22,7 @@ export abstract class Mediator implements IMediator {
     }
     Change(id: string, type?: any) {
         let item= this.Storage.filter(s=>s.Id===id)[0];
+        if(item)
         item.ForEach(i=>{
             if(type&&i.Type!=type)return;
             (i.Data as Function)();

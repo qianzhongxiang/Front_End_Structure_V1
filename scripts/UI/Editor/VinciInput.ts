@@ -1,6 +1,5 @@
 import { VinciEditorBase } from './VinciEditorBase';
-
-export class VinciInput extends VinciEditorBase<any> {
+export class VinciInput<OptionsT extends any> extends VinciEditorBase<OptionsT> {
     private InputChangeEvent;
     constructor(element?: HTMLInputElement, options?) {
         let elem = element;

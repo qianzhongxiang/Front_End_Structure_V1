@@ -7,7 +7,7 @@ export interface IVinciDropDownListOptions {
     TextField?: string
     DataSource?: Utilities.DataSource | any[]
 }
-export class VinciDropDownList extends VinciEditorBase<IVinciDropDownListOptions> {
+export class VinciDropDownList<OptionsT> extends VinciEditorBase<IVinciDropDownListOptions> {
     public DataSource: Utilities.DataSource
     private UlClickEvent
     private WrapperClickEvent

@@ -1,10 +1,14 @@
 {
     "compilerOptions": {
         "target": "es5",
-        "module":"AMD",
+        "module": "AMD",
         "sourceMap": true
     },
-    "files":["../scripts/UI/Layer/VinciModalLayer.ts"
-        ,"../scripts/UI/Layer/VinciWindow.ts"
-    ,"../scripts/UI/Editor/VinciDropDownList.ts"]
+    "files": [
+        "../scripts/UI/Layer/VinciModalLayer.ts",
+        "../scripts/UI/Layer/VinciWindow.ts",
+        "../scripts/UI/Editor/VinciDropDownList.ts",
+        "../scripts/Plugins/DraggableComponent.ts",
+        "../examples/Darggable_Main.ts"
+    ]
 }
