@@ -1,3 +1,4 @@
+import { IVinciDropDownListOptions } from './../UI/Editor/VinciDropDownList';
 import { ObserverableWMediator } from './ObserverableWithMediator';
 import * as Utilities from './../Utilities/Guid';
 
@@ -13,7 +14,15 @@ export interface IComposit {
 export abstract class Composit extends ObserverableWMediator implements IComposit {
     public Id: string
     public Parent: IComposit
-    private Children: Array<IComposit>=[]
+    private Children: Array<IComposit> = []
+    private static Coms: Array<Composit> = [];
+    public static Get(id: string): Composit {
+        return this.Coms.filter(c => c.Id == id)[0];
+    }
+    constructor(){
+        super();
+        Composit.Coms.push(this);
+    }
     public Add(Obj: IComposit): IComposit {
         Obj.Parent = Obj;
         if (!this.GetChild(Obj.Id))

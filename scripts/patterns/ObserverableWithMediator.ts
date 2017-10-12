@@ -2,13 +2,23 @@ import { Mediator } from "./Mediator";
 import { Observerable, ObserverMsg } from './Observerable';
 
 class ObserMediator extends Mediator {
-    Register(subject: string|ObserverableWMediator, fn: Function, type?: any) {
+    Register(subject, fn: Function, type?: any) {
        super.Register(typeof subject ==="string"?subject: subject.Id, fn, type)
     }
-    Change(subject:  string|ObserverableWMediator, type?: any) {
-        super.Change(typeof subject ==="string"?subject: subject.Id, type)
+    Change(subject , type?: any,value?:any) {
+        let id=typeof subject ==="string"?subject: subject.Id
+            ,item= this.Storage.filter(s=>s.Id===id)[0];
+            if(item)
+            item.ForEach(i=>{
+                if(type&&i.Type!=type)return;
+                let p=new ObserverMsg();
+                p.Type=type;
+                p.Value=value;
+                p.Sender=subject;
+                (i.Data as Function)(p);
+            })
     }
-    Unregister(subject:  string|ObserverableWMediator, fn: Function, type?: any) {
+    Unregister(subject, fn: Function, type?: any) {
         super.Register(typeof subject ==="string"?subject: subject.Id,fn, type)
     }
 }
@@ -21,13 +31,13 @@ export class ObserverableWMediator extends Observerable {
             if(state){
                 if(value!==state.value)
                 {
-                    mediator.Change(this,type);
+                    mediator.Change(this,type,value);
                 }
             }else{this.StateTable.push(state);
-                mediator.Change(this,type);
+                mediator.Change(this,type,value);
             }
         }else{
-            mediator.Change(this,type);
+            mediator.Change(this,type,value);
         }
     }
     /**

@@ -9,11 +9,13 @@ class MediaNode extends DS.LNode {
     public Type: string
 }
 export abstract class Mediator implements IMediator {
-    private Storage: Array<DS.LinkList<MediaNode>>=[]
+    protected Storage: Array<DS.LinkList<MediaNode>>=[]
     Register(id: string, fn: Function, type?: any) {
        let item= this.Storage.filter(s=>s.Id===id)[0];
        if(!item){
-        this.Storage.push(item=new DS.LinkList<MediaNode>());
+        item=new DS.LinkList<MediaNode>();
+        item.Id=id;
+        this.Storage.push(item);
        }
        let newItem=new MediaNode();
        newItem.Type=type;

@@ -6,12 +6,14 @@ export class ObserverMsg {
     public Value: any
 }
 export interface IObseverable {
+    Id:string
     GetState(type: string);
     Bind(type: string, fn: (msg: ObserverMsg, ...parameters: any[]) => void, ownObj?: Object, ...otherData: any[])
     Once(type: string, fn: (msg: ObserverMsg, ...parameters: any[]) => void, ownObj?: Object, ...otherData: any[])
 }
 export abstract class Observerable implements IObseverable {
     public Id:string
+    public Events:Object
     constructor() {
         this.Id = Utilities.Guid.NewId();
     }
