@@ -18,7 +18,7 @@ export class Draggable extends Patterns.Composit {
         this.Wrapper.addEventListener("mouseover", this.MouseOver.bind(this));
         this.Wrapper.addEventListener("mouseleave", this.MouseLeave.bind(this));
         if (this.Element.parentNode) {
-            this.Element.parentNode.insertBefore(this.Wrapper,this.Element);
+            this.Element.parentNode.insertBefore(this.Wrapper, this.Element);
         }
         this.Wrapper.appendChild(this.Element);
     }
@@ -37,8 +37,9 @@ export class Draggable extends Patterns.Composit {
         this.SetState(this.Events.DragStart);
     }
     private MouseOver(e: MouseEvent) {
-        if (this.Element.querySelector(".tooltip")) return;
+        if (this.Wrapper.querySelector(".tooltip")) return;
         let tooltip = document.createElement("div");
+        tooltip.style.opacity = "1";
         tooltip.classList.add("tooltip");
         tooltip.classList.add("bs-tooltip-bottom");
         tooltip.classList.add("bs-tooltip-bottom-docs");
@@ -49,23 +50,27 @@ export class Draggable extends Patterns.Composit {
         let inner = document.createElement("div");
         inner.classList.add("tooltip-inner");
         this.SpanBtns.forEach(b => {
-            let btn = document.createElement("button");
+            let btn = document.createElement("a");
             btn.dataset["value"] = b.value.toString();
             btn.innerText = b.text;
+            btn.href = "javascript:void(0);";
+            inner.appendChild(document.createTextNode(" "));
             inner.appendChild(btn);
         })
         inner.addEventListener("click", (e: MouseEvent) => {
-            let target = e.target as HTMLButtonElement;
-            if (target instanceof HTMLButtonElement)
+            let target = e.target as HTMLAnchorElement;
+            if (target instanceof HTMLAnchorElement) {
                 this.Span = parseInt(target.dataset["value"]);
+                this.MouseLeave(e);
+            }
         })
-        arrow.appendChild(inner);
+        tooltip.appendChild(inner);
         this.Wrapper.appendChild(tooltip);
     }
     private MouseLeave(e: MouseEvent) {
         let tooltip;
-        if (tooltip = this.Element.querySelector(".tooltip"))
-            this.Element.removeChild(tooltip);
+        if (tooltip = this.Wrapper.querySelector(".tooltip"))
+            this.Wrapper.removeChild(tooltip);
     }
     /**
      * real darggable component entity --done
@@ -73,7 +78,7 @@ export class Draggable extends Patterns.Composit {
     public ComponentEntity(): HTMLElement {
         if (this.component)
             return this.component.Element;
-        else return this.Element;
+        else return this.Wrapper;
     }
     private DropIntoTrashCan() {
 
@@ -149,9 +154,9 @@ export class DraggableContainer extends Patterns.Composit {
             if (!this.DragenterEvent)
                 this.Element.addEventListener("dragenter", this.DragenterEvent = this.Dragenter.bind(this), false)
             if (!this.DropEvent)
-                this.Element.addEventListener("drop", this.DropEvent = this.Drop.bind(this));
+                document.addEventListener("drop", this.DropEvent = this.Drop.bind(this), false);
             if (!this.DragoverEvent)
-                this.Element.addEventListener("dragover", this.DragoverEvent = this.Dragover.bind(this));
+                this.Element.addEventListener("dragover", this.DragoverEvent = this.Dragover.bind(this), false);
             this._edited = v;
         }
         if (!v && this.HideAndRemoveRow()) {
@@ -160,7 +165,7 @@ export class DraggableContainer extends Patterns.Composit {
             if (this.DropEvent)
                 this.Element.removeEventListener("drop", this.DropEvent);
             if (this.DragoverEvent)
-                this.Element.removeEventListener("dragover", this.DragoverEvent = this.Dragover.bind(this));
+                this.Element.removeEventListener("dragover", this.DragoverEvent);
             this._edited = v;
         }
     }
@@ -177,7 +182,6 @@ export class DraggableContainer extends Patterns.Composit {
      * @param e 
      */
     private Dragenter(e: DragEvent) {
-        e.preventDefault();
         //let id=e.dataTransfer.getData("text/plain");
         //get component coincide with e.dataTransfer ["Id"]
         let com: Draggable = Patterns.Composit.Get(this.CurrentGraggableId) as Draggable;
@@ -186,19 +190,30 @@ export class DraggableContainer extends Patterns.Composit {
     }
     private Dragover(e: DragEvent) {
         e.preventDefault();
-        e.dataTransfer.dropEffect = "move"
+        // e.dataTransfer.dropEffect = "move"
     }
     private Drop(e: DragEvent) {
+        e.preventDefault();
         let target = e.target as HTMLDivElement
         if (target.classList.contains("DC-Col") && !target.classList.contains("full")) {
             let com: Draggable = Patterns.Composit.Get(e.dataTransfer.getData("Id")) as Draggable;
             let ele = com.ComponentEntity();
-            if (ele.parentElement && ele.parentElement.classList.contains("DC-Col"))
-                com.Element.parentElement.classList.remove("full");
+            if (ele.parentElement && ele.parentElement.classList.contains("DC-Col")) {
+                ele.parentElement.classList.remove("full");
+                this.SetRowClass(ele.parentElement.parentElement);
+            }
             target.appendChild(ele);
             target.classList.add("full");
-            target.parentElement.classList.remove("empty");
+            this.SetRowClass(target.parentElement)
         }
+    }
+    /**
+     * 根据情况设置Row的类
+     */
+    private SetRowClass(row: HTMLElement) {
+        let sub = row.querySelector(".full");
+        if (sub) row.classList.remove("empty");
+        else row.classList.add("empty");
     }
     public Destroy() {
         //DragenterEvent
@@ -210,54 +225,73 @@ export class DraggableContainer extends Patterns.Composit {
      * 再最底层始终保持有两排空的 done
      */
     public ShowAndCreateRow(): boolean {
-        while (this.Element.lastElementChild && this.Element.lastElementChild.classList.contains("empty")) {
-            this.Element.removeChild(this.Element.lastElementChild);
-        }
         //existing layer show --done
-        let rows = this.Element.getElementsByClassName("row"), ext = new RegExp(/[col-\d+,col-sm-\d,col-md-\d,col-lg-\d,col-xl-\d]/), len = rows.length;
+        let rows = this.Element.getElementsByClassName("row"), ext = new RegExp(/col-\d+|col-sm-\d+|col-md-\d+|col-lg-\d+|col-xl-\d+/), len = rows.length;
         for (var index = 0; index < len; index++) {
             var r = rows[index];
             let sign = 0, subDiv = r.firstChild as HTMLDivElement, arry = [];
             while (subDiv) {
                 arry.push(subDiv);
-                ext.exec(subDiv.getAttribute("class"));
-                let span = parseInt(ext[0]);
+                let ms = subDiv.getAttribute("class").match(ext);
+                let span = parseInt((ms[0] as string).match(/\d+/)[0]);
                 if (subDiv.classList.contains("full")) { arry = []; sign = 0; subDiv = subDiv.nextSibling as HTMLDivElement; continue; }
                 subDiv = subDiv.nextSibling as HTMLDivElement;
-                if ((sign += span) == this.ColSpan) {
+                if ((sign += span) >= this.ColSpan) {
                     while (arry.length) r.removeChild(arry.pop());
-                    let newDiv = document.createElement("div");
-                    newDiv.classList.add("col-" + this.ColSpan);
-                    newDiv.classList.add("DC-Col");
-                    newDiv.classList.add("border");
-                    newDiv.classList.add("border-success");
-                    newDiv.style.height = "100%";
-                    if (subDiv)
-                        r.insertBefore(newDiv, subDiv);
-                    else r.appendChild(newDiv);
+                    while ((sign -= this.ColSpan) >= this.ColSpan) {
+                        let newDiv = this.GenerateCol(this.ColSpan);
+                        if (subDiv)
+                            r.insertBefore(newDiv, subDiv);
+                        else r.appendChild(newDiv);
+                    }
+                    if (sign > 0) {
+                        let newDiv = this.GenerateCol(sign);
+                        if (subDiv)
+                            r.insertBefore(newDiv, subDiv);
+                        else r.appendChild(newDiv);
+                    }
                 }
             }
         }
+        let l = this.Element.children.length
+        let rs = this.Element.querySelectorAll(".row:not(.empty)");
+        if (rs.length > 0) {
+            let nodes = Array.prototype.slice.call(this.Element.children);
+            l = l - nodes.indexOf(rs[rs.length - 1]) - 1;
+        }
+        // if (last) {
+        //     let nodes = Array.prototype.slice.call(this.Element.children);
+        //     l = l - nodes.indexOf(last) - 1;
+        // }
         //create new layer --done
-        while (this.Element.getElementsByClassName("empty").length < 2) {
+        while (l < 2) {
             let div = document.createElement("div");
             div.classList.add("row");
             div.classList.add("empty");
             div.style.height = this.RowHeight + "px";
             let count = Math.floor(12 / this.ColSpan);
             for (let i = 0; i < count; i++) {
-                let subDiv = document.createElement("div");
-                subDiv.classList.add("col-" + this.ColSpan);
-                subDiv.classList.add("DC-Col");
-                subDiv.classList.add("border");
-                subDiv.classList.add("border-success");
-                subDiv.style.height = "100%";
-                div.appendChild(subDiv);
+                div.appendChild(this.GenerateCol(this.ColSpan));
             }
             this.Element.appendChild(div);
+            l++;
+        }
+        while (l > 2) {
+            this.Element.removeChild(this.Element.lastElementChild);
+            l--;
         }
 
         return true;
+    }
+    private GenerateCol(ColSpan: number): HTMLDivElement {
+        let subDiv = document.createElement("div");
+        subDiv.style.border = "dotted";
+        subDiv.classList.add("col-" + this.ColSpan);
+        subDiv.classList.add("DC-Col");
+        subDiv.classList.add("border");
+        subDiv.classList.add("border-success");
+        subDiv.style.height = "100%";
+        return subDiv;
     }
     public HideAndRemoveRow(): boolean {
         //remove redundant rows  done
