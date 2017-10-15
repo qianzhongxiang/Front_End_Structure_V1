@@ -141,10 +141,7 @@ export class DraggableContainer extends Patterns.Composit {
     private DropEvent;
     private DragoverEvent;
     public RowHeight = 180;
-    /**
-     * 目前因为 GragEnter 中 dataTranfer.getData()无法使用
-     */
-    public CurrentGraggableId
+
     public get Edited(): boolean {
         return this._edited;
     }
@@ -169,7 +166,17 @@ export class DraggableContainer extends Patterns.Composit {
             this._edited = v;
         }
     }
-
+    public RegistCom(com: Draggable) {
+        com.Bind("DragStart", msg => {
+            if(!this.Edited)return;
+            /**
+            * 目前因为 GragEnter 中 dataTranfer.getData()无法使用
+            */
+            let com: Draggable = Patterns.Composit.Get(msg.Sender.Id) as Draggable;
+            this.ColSpan = com.Span;
+            this.ShowAndCreateRow();
+        });
+    }
     constructor(public Element: HTMLDivElement, script?: string) {
         super();
         Element.classList.add("DraggableContainer");
@@ -182,11 +189,10 @@ export class DraggableContainer extends Patterns.Composit {
      * @param e 
      */
     private Dragenter(e: DragEvent) {
+        e.preventDefault();
         //let id=e.dataTransfer.getData("text/plain");
         //get component coincide with e.dataTransfer ["Id"]
-        let com: Draggable = Patterns.Composit.Get(this.CurrentGraggableId) as Draggable;
-        this.ColSpan = com.Span;
-        this.ShowAndCreateRow();
+
     }
     private Dragover(e: DragEvent) {
         e.preventDefault();
@@ -238,7 +244,8 @@ export class DraggableContainer extends Patterns.Composit {
                 subDiv = subDiv.nextSibling as HTMLDivElement;
                 if ((sign += span) >= this.ColSpan) {
                     while (arry.length) r.removeChild(arry.pop());
-                    while ((sign -= this.ColSpan) >= this.ColSpan) {
+                    while (sign >= this.ColSpan) {
+                        sign -= this.ColSpan;
                         let newDiv = this.GenerateCol(this.ColSpan);
                         if (subDiv)
                             r.insertBefore(newDiv, subDiv);
@@ -268,7 +275,6 @@ export class DraggableContainer extends Patterns.Composit {
             let div = document.createElement("div");
             div.classList.add("row");
             div.classList.add("empty");
-            div.style.height = this.RowHeight + "px";
             let count = Math.floor(12 / this.ColSpan);
             for (let i = 0; i < count; i++) {
                 div.appendChild(this.GenerateCol(this.ColSpan));
@@ -285,12 +291,13 @@ export class DraggableContainer extends Patterns.Composit {
     }
     private GenerateCol(ColSpan: number): HTMLDivElement {
         let subDiv = document.createElement("div");
-        subDiv.style.border = "dotted";
         subDiv.classList.add("col-" + this.ColSpan);
         subDiv.classList.add("DC-Col");
         subDiv.classList.add("border");
         subDiv.classList.add("border-success");
-        subDiv.style.height = "100%";
+        subDiv.classList.add("m-1");
+        subDiv.style.height = this.RowHeight + "px";
+        // subDiv.style.borderStyle = "dotted";
         return subDiv;
     }
     public HideAndRemoveRow(): boolean {

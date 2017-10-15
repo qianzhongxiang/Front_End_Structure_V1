@@ -21,17 +21,17 @@ class Controller{
         o1.innerText="o1";
         objectContainer.appendChild(o1);
         let oo1=new Draggable(o1);
-        oo1.Bind(oo1.Events.DragStart,msg=>dC.CurrentGraggableId=msg.Sender.Id);
         let o2=document.createElement("button");
         o2.innerText="o2"
         objectContainer.appendChild(o2);
         let oo2=new Draggable(o2);
-        oo2.Bind(oo2.Events.DragStart,msg=>dC.CurrentGraggableId=msg.Sender.Id);
         let o3=document.createElement("button");
         o3.innerText="o3"
         objectContainer.appendChild(o3);
         let oo3=new Draggable(o3);
-        oo3.Bind(oo3.Events.DragStart,msg=>dC.CurrentGraggableId=msg.Sender.Id);
+        dC.RegistCom(oo1);
+        dC.RegistCom(oo2);
+        dC.RegistCom(oo3);
     }
 }
 
