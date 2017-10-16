@@ -168,7 +168,7 @@ export class DraggableContainer extends Patterns.Composit {
     }
     public RegistCom(com: Draggable) {
         com.Bind("DragStart", msg => {
-            if(!this.Edited)return;
+            if (!this.Edited) return;
             /**
             * 目前因为 GragEnter 中 dataTranfer.getData()无法使用
             */
@@ -201,16 +201,23 @@ export class DraggableContainer extends Patterns.Composit {
     private Drop(e: DragEvent) {
         e.preventDefault();
         let target = e.target as HTMLDivElement
+        if (!target.classList.contains("DC-Col")) target = target.parentElement as HTMLDivElement;
         if (target.classList.contains("DC-Col") && !target.classList.contains("full")) {
-            let com: Draggable = Patterns.Composit.Get(e.dataTransfer.getData("Id")) as Draggable;
+            let com: Draggable = Patterns.Composit.Get(e.dataTransfer.getData("Id")) as Draggable
+                , ext = new RegExp(/col-\d+|col-sm-\d+|col-md-\d+|col-lg-\d+|col-xl-\d+/)
+                , ms = target.getAttribute("class").match(ext)
+                , span = parseInt((ms[0] as string).match(/\d+/)[0]);
+            if (span != com.Span) return;
             let ele = com.ComponentEntity();
             if (ele.parentElement && ele.parentElement.classList.contains("DC-Col")) {
                 ele.parentElement.classList.remove("full");
                 this.SetRowClass(ele.parentElement.parentElement);
             }
+            target.innerHTML = "";
             target.appendChild(ele);
             target.classList.add("full");
             this.SetRowClass(target.parentElement)
+            this.ShowAndCreateRow();
         }
     }
     /**
@@ -235,29 +242,37 @@ export class DraggableContainer extends Patterns.Composit {
         let rows = this.Element.getElementsByClassName("row"), ext = new RegExp(/col-\d+|col-sm-\d+|col-md-\d+|col-lg-\d+|col-xl-\d+/), len = rows.length;
         for (var index = 0; index < len; index++) {
             var r = rows[index];
-            let sign = 0, subDiv = r.firstChild as HTMLDivElement, arry = [];
+            let sign = 0, subDiv = r.querySelector(".DC-Col:not(.full)") as HTMLDivElement, arry = [];
             while (subDiv) {
                 arry.push(subDiv);
-                let ms = subDiv.getAttribute("class").match(ext);
-                let span = parseInt((ms[0] as string).match(/\d+/)[0]);
-                if (subDiv.classList.contains("full")) { arry = []; sign = 0; subDiv = subDiv.nextSibling as HTMLDivElement; continue; }
-                subDiv = subDiv.nextSibling as HTMLDivElement;
-                if ((sign += span) >= this.ColSpan) {
-                    while (arry.length) r.removeChild(arry.pop());
-                    while (sign >= this.ColSpan) {
-                        sign -= this.ColSpan;
-                        let newDiv = this.GenerateCol(this.ColSpan);
-                        if (subDiv)
-                            r.insertBefore(newDiv, subDiv);
-                        else r.appendChild(newDiv);
+                let ms = subDiv.getAttribute("class").match(ext), span = parseInt((ms[0] as string).match(/\d+/)[0])
+                    , next = subDiv.nextSibling as HTMLDivElement
+                sign += span
+                if (!next || next.classList.contains("full")) {
+                    if (sign >= this.ColSpan) {
+                        while (arry.length) r.removeChild(arry.pop());
+                        while (sign >= this.ColSpan) {
+                            sign -= this.ColSpan;
+                            let newDiv = this.GenerateCol(this.ColSpan);
+                            if (next)
+                                r.insertBefore(newDiv, next);
+                            else r.appendChild(newDiv);
+                        }
                     }
                     if (sign > 0) {
                         let newDiv = this.GenerateCol(sign);
-                        if (subDiv)
-                            r.insertBefore(newDiv, subDiv);
+                        if (next)
+                            r.insertBefore(newDiv, next);
                         else r.appendChild(newDiv);
                     }
+                    arry = []; sign = 0;
                 }
+                //skip full column
+                while (next && next.classList.contains("full")) {
+                    next = subDiv.nextSibling as HTMLDivElement;
+                }
+
+                subDiv = next
             }
         }
         let l = this.Element.children.length
@@ -275,6 +290,7 @@ export class DraggableContainer extends Patterns.Composit {
             let div = document.createElement("div");
             div.classList.add("row");
             div.classList.add("empty");
+            div.style.height = this.RowHeight + "px";
             let count = Math.floor(12 / this.ColSpan);
             for (let i = 0; i < count; i++) {
                 div.appendChild(this.GenerateCol(this.ColSpan));
@@ -293,11 +309,19 @@ export class DraggableContainer extends Patterns.Composit {
         let subDiv = document.createElement("div");
         subDiv.classList.add("col-" + this.ColSpan);
         subDiv.classList.add("DC-Col");
-        subDiv.classList.add("border");
-        subDiv.classList.add("border-success");
-        subDiv.classList.add("m-1");
-        subDiv.style.height = this.RowHeight + "px";
-        // subDiv.style.borderStyle = "dotted";
+        subDiv.style.height = "100%";
+        subDiv.style.position = "relative";
+        let border = document.createElement("div");
+        border.classList.add("border");
+        border.classList.add("border-success");
+        border.style.borderStyle = "dotted";
+        border.style.position = "absolute";
+        border.style.top = "0";
+        border.style.left = "0";
+        border.style.bottom = "0";
+        border.style.right = "0";
+        border.classList.add("m-1");
+        subDiv.appendChild(border);
         return subDiv;
     }
     public HideAndRemoveRow(): boolean {
