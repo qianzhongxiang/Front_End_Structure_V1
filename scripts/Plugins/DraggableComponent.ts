@@ -335,11 +335,20 @@ export class DraggableContainer extends Patterns.Composit {
         return true;
     }
     public ToString(): string {
+        this.HideAndRemoveRow();
         //genrate string of script
         return "";
     }
     public ScriptAnalysis(str: string): boolean {
+        let l1 = str.split("|"), rN: number, rows: Array<string>, strRCom: Array<string> = l1[1].split(";");
+        rN = parseInt((rows = l1[0].split(";")).shift());
+        if(rN!=rows.length||rN!=strRCom.length){console.error("rN!=rows.length||rN!=strRCom.length");return false;}
+        rows.forEach(r=>{
 
+        });
+        strRCom.forEach(rc=>{
+
+        });
         return true;
     }
 }
