@@ -21,6 +21,7 @@ export class Draggable extends Patterns.Composit {
             this.Element.parentNode.insertBefore(this.Wrapper, this.Element);
         }
         this.Wrapper.appendChild(this.Element);
+        this.Id
     }
     public Destroy() {
         if (this.component) {
