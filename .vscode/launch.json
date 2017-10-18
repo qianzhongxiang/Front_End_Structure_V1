@@ -8,14 +8,14 @@
             "type": "chrome",
             "request": "launch",
             "name": "ModalLayer-Chrome",
-            "url": "file:///I:/git/Front_End_Structure_V1/examples/ModalLayer.html",
+            "url": "${workspaceRoot}\\examples\\ModalLayer.html",
             "webRoot": "${workspaceRoot}"
         },
         {
             "type": "chrome",
             "request": "launch",
             "name": "Darggable-Chrome",
-            "url": "file:///I:/git/Front_End_Structure_V1/examples/Darggable.html",
+            "url": "${workspaceRoot}\\examples\\Darggable.html",
             "webRoot": "${workspaceRoot}"
         }
     ]

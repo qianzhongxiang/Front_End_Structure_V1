@@ -1,3 +1,4 @@
+import { ToString } from './../Utilities/Type';
 import * as Patterns from '../Patterns/Composit';
 /**
  * Draggable; this is a container 
@@ -10,18 +11,28 @@ export class Draggable extends Patterns.Composit {
     public Span: number = 12
     private DragStartEvent
     public Wrapper: HTMLElement
-    constructor(public Element: HTMLElement, private component?: { Element: HTMLElement, Destroy?: () => void }) {
+    /**
+     * 
+     * @param Element showning draggable handler
+     * @param sign unique mark for saving
+     * @param component real showing content
+     */
+    constructor(public Element: HTMLElement, public sign: string, private component?: { Element: HTMLElement, Destroy?: () => void }) {
         super()
         this.Wrapper = document.createElement("div");
         this.Wrapper.draggable = true;
         this.Wrapper.addEventListener("dragstart", this.DragStartEvent = this.Dragstart.bind(this));
         this.Wrapper.addEventListener("mouseover", this.MouseOver.bind(this));
         this.Wrapper.addEventListener("mouseleave", this.MouseLeave.bind(this));
+        if (component && component.Element) {
+            component.Element.draggable = true;
+            component.Element.addEventListener("dragstart", this.DragStartEvent = this.Dragstart.bind(this));
+        }
         if (this.Element.parentNode) {
             this.Element.parentNode.insertBefore(this.Wrapper, this.Element);
         }
         this.Wrapper.appendChild(this.Element);
-        this.Id
+        this.Wrapper.dataset["Draggable"] = this.Id
     }
     public Destroy() {
         if (this.component) {
@@ -86,14 +97,17 @@ export class Draggable extends Patterns.Composit {
     }
 }
 
+// interface DraggableToolbarEventsMap{
+//     "OnEdit"
+// }
 export class DraggableToolbar extends Patterns.Composit {
-    private Button: HTMLButtonElement
-    private RemoveArea: HTMLDivElement
     public Events = {
         OnEdit: "OnEdit",
         OnSave: "OnSave",
         OnDroped: "OnDroped",
     }
+    private DropEventHander
+    private DragOverEventHander
     constructor(public Element: HTMLDivElement) {
         super();
         this.Initialize();
@@ -103,29 +117,56 @@ export class DraggableToolbar extends Patterns.Composit {
      */
     public Initialize() {
         this.Element.style.height = "3em";
-        if (!this.Button) {
-            this.Button = document.createElement("button");
-            this.Button.innerText = "Edit";
-            this.Button.onclick = (e: MouseEvent) => {
-                let btn = e.target as HTMLButtonElement;
-                if (btn.classList.contains("btn-primary")) {
-                    btn.classList.remove("btn-primary");
-                    btn.classList.add("btn-success");
-                    btn.innerText = "Save";
-                    this.SetState(this.Events.OnEdit)
-                } else {
-                    this.SaveScript();
-                    btn.classList.remove("btn-success");
-                    btn.classList.add("btn-primary");
-                    btn.innerText = "Edit";
-                    this.SetState(this.Events.OnSave)
-                }
+        this.Element.innerHTML = "";
+        let Button = document.createElement("button");
+        Button.type = "button";
+        Button.innerText = "Edit";
+        Button.onclick = (e: MouseEvent) => {
+            let btn = e.target as HTMLButtonElement;
+            if (btn.classList.contains("btn-primary")) {
+                btn.classList.remove("btn-primary");
+                btn.classList.add("btn-success");
+                btn.innerText = "Save";
+                this.SetState(this.Events.OnEdit)
+                this.Element.querySelector(".RemoveArea").addEventListener("dragover", this.DragOverEventHander || (this.DragOverEventHander = this.DragOverEvent.bind(this)), false)
+                this.Element.querySelector(".RemoveArea").addEventListener("drop", this.DropEventHander || (this.DropEventHander = this.DropEvent.bind(this)), false)
+            } else {
+                this.SaveScript();
+                btn.classList.remove("btn-success");
+                btn.classList.add("btn-primary");
+                btn.innerText = "Edit";
+                this.SetState(this.Events.OnSave);
+                this.Element.querySelector(".RemoveArea").removeEventListener("dragover", this.DragOverEventHander);
+                this.Element.querySelector(".RemoveArea").removeEventListener("drop", this.DropEventHander);
             }
-            this.Button.classList.add("btn");
-            this.Button.classList.add("btn-primary");
-            this.Button.classList.add("float-left");
-            this.Element.appendChild(this.Button);
         }
+        Button.classList.add("btn", "btn-primary", "float-left", "btn-sm", "align-middle");
+        this.Element.appendChild(Button);
+        let RemoveArea = document.createElement("div");
+        RemoveArea.classList.add("float-right", "border", "border-danger", "RemoveArea")
+        RemoveArea.style.width = "4em";
+        RemoveArea.style.height = "3em";
+        this.Element.appendChild(RemoveArea);
+    }
+    private DropEvent(e: DragEvent) {
+        e.preventDefault();
+        let id = e.dataTransfer.getData("Id")
+            , com = Patterns.Composit.Get(id) as Draggable
+            , ele = com.ComponentEntity()
+        //1. the target is draggable.element
+        //need to return it's origin place
+        if (ele == com.Wrapper) {
+            //TODO 
+            return;
+        }
+        //2. the target is created component, and just exist only instance.
+        ele.parentElement.removeChild(ele);
+
+        //3. the target is created component, but it is copy of the instance.
+        //TODO 
+    }
+    private DragOverEvent(e: DragEvent) {
+        e.preventDefault();
     }
     public SaveScript() {
 
@@ -141,7 +182,10 @@ export class DraggableContainer extends Patterns.Composit {
     private DragenterEvent;
     private DropEvent;
     private DragoverEvent;
+    private DragendHandler
+    private UnitMark = false
     public RowHeight = 180;
+    private SpanExt = new RegExp(/col-\d+|col-sm-\d+|col-md-\d+|col-lg-\d+|col-xl-\d+/)
 
     public get Edited(): boolean {
         return this._edited;
@@ -152,18 +196,15 @@ export class DraggableContainer extends Patterns.Composit {
             if (!this.DragenterEvent)
                 this.Element.addEventListener("dragenter", this.DragenterEvent = this.Dragenter.bind(this), false)
             if (!this.DropEvent)
-                document.addEventListener("drop", this.DropEvent = this.Drop.bind(this), false);
+                this.Element.addEventListener("drop", this.DropEvent = this.Drop.bind(this), false);
             if (!this.DragoverEvent)
                 this.Element.addEventListener("dragover", this.DragoverEvent = this.Dragover.bind(this), false);
             this._edited = v;
         }
         if (!v && this.HideAndRemoveRow()) {
-            if (this.DragenterEvent)
-                this.Element.removeEventListener("dragenter", this.DragenterEvent)
-            if (this.DropEvent)
-                this.Element.removeEventListener("drop", this.DropEvent);
-            if (this.DragoverEvent)
-                this.Element.removeEventListener("dragover", this.DragoverEvent);
+            this.Element.removeEventListener("dragenter", this.DragenterEvent)
+            this.Element.removeEventListener("drop", this.DropEvent);
+            this.Element.removeEventListener("dragover", this.DragoverEvent);
             this._edited = v;
         }
     }
@@ -200,6 +241,7 @@ export class DraggableContainer extends Patterns.Composit {
         // e.dataTransfer.dropEffect = "move"
     }
     private Drop(e: DragEvent) {
+        this.UnitMark = true;
         e.preventDefault();
         let target = e.target as HTMLDivElement
         if (!target.classList.contains("DC-Col")) target = target.parentElement as HTMLDivElement;
@@ -210,15 +252,36 @@ export class DraggableContainer extends Patterns.Composit {
                 , span = parseInt((ms[0] as string).match(/\d+/)[0]);
             if (span != com.Span) return;
             let ele = com.ComponentEntity();
-            if (ele.parentElement && ele.parentElement.classList.contains("DC-Col")) {
-                ele.parentElement.classList.remove("full");
-                this.SetRowClass(ele.parentElement.parentElement);
-            }
-            target.innerHTML = "";
-            target.appendChild(ele);
-            target.classList.add("full");
-            this.SetRowClass(target.parentElement)
+            this.MoveOut(ele.parentElement, ele);
+            this.MoveIn(target, ele);
             this.ShowAndCreateRow();
+        }
+        this.UnitMark = false;
+    }
+    private DragEnd(target: HTMLElement, e: DragEvent) {
+        if (this.UnitMark) return;
+        let source = e.target as HTMLElement;
+        if (target.classList.contains("full") && !target.contains(source)) {
+            this.MoveOut(target, source);
+            this.ShowAndCreateRow();
+        }
+        console.log("end")
+        source.removeEventListener("dragend", this.DragendHandler);
+    }
+    private MoveIn(target: HTMLElement, source: HTMLElement) {
+        target.innerHTML = "";
+        target.appendChild(source);
+        //add one-off drapend for ele
+        console.log("drop")
+        source.removeEventListener("dragend", this.DragendHandler)
+        source.addEventListener("dragend", this.DragendHandler || (this.DragendHandler = this.DragEnd.bind(this, target)));
+        target.classList.add("full");
+        this.SetRowClass(target.parentElement)
+    }
+    private MoveOut(target: HTMLElement, source: HTMLElement) {
+        if (target && target.classList.contains("DC-Col")) {
+            target.classList.remove("full");
+            this.SetRowClass(target.parentElement);
         }
     }
     /**
@@ -240,13 +303,13 @@ export class DraggableContainer extends Patterns.Composit {
      */
     public ShowAndCreateRow(): boolean {
         //existing layer show --done
-        let rows = this.Element.getElementsByClassName("row"), ext = new RegExp(/col-\d+|col-sm-\d+|col-md-\d+|col-lg-\d+|col-xl-\d+/), len = rows.length;
+        let rows = this.Element.getElementsByClassName("row"), len = rows.length;
         for (var index = 0; index < len; index++) {
             var r = rows[index];
             let sign = 0, subDiv = r.querySelector(".DC-Col:not(.full)") as HTMLDivElement, arry = [];
             while (subDiv) {
                 arry.push(subDiv);
-                let ms = subDiv.getAttribute("class").match(ext), span = parseInt((ms[0] as string).match(/\d+/)[0])
+                let ms = subDiv.getAttribute("class").match(this.SpanExt), span = parseInt((ms[0] as string).match(/\d+/)[0])
                     , next = subDiv.nextSibling as HTMLDivElement
                 sign += span
                 if (!next || next.classList.contains("full")) {
@@ -288,15 +351,7 @@ export class DraggableContainer extends Patterns.Composit {
         // }
         //create new layer --done
         while (l < 2) {
-            let div = document.createElement("div");
-            div.classList.add("row");
-            div.classList.add("empty");
-            div.style.height = this.RowHeight + "px";
-            let count = Math.floor(12 / this.ColSpan);
-            for (let i = 0; i < count; i++) {
-                div.appendChild(this.GenerateCol(this.ColSpan));
-            }
-            this.Element.appendChild(div);
+            this.CreateNewRows(this.ColSpan);
             l++;
         }
         while (l > 2) {
@@ -313,8 +368,7 @@ export class DraggableContainer extends Patterns.Composit {
         subDiv.style.height = "100%";
         subDiv.style.position = "relative";
         let border = document.createElement("div");
-        border.classList.add("border");
-        border.classList.add("border-success");
+        border.classList.add("border", "border-success");
         border.style.borderStyle = "dotted";
         border.style.position = "absolute";
         border.style.top = "0";
@@ -335,21 +389,67 @@ export class DraggableContainer extends Patterns.Composit {
         // subDiv.classList.add("border-success");
         return true;
     }
+    /**
+     * ToString done
+     */
     public ToString(): string {
         this.HideAndRemoveRow();
         //genrate string of script
-        return "";
+        let rows = this.Element.querySelectorAll(".row"), rl = rows.length
+            , res: string = rows.length.toString(), s1 = "", s2 = "";
+        for (let i = 0; i < rl; i++) {
+            let r = rows[i];
+            s1 += ";"; s2 += ";"
+            if (r.classList.contains("empty")) return;
+            let cols = r.querySelectorAll(".DC-Col"), cl = cols.length, a1 = [], a2 = [];
+            for (let ci = 0; ci < cl; ci++) {
+                let c = cols[ci];
+                let ms = c.getAttribute("class").match(this.SpanExt), span = parseInt((ms[0] as string).match(/\d+/)[0])
+                a1.push(span);
+                if (c.classList.contains("full")) {
+                    let id = (c.firstChild as HTMLElement).dataset["Draggable"];
+                    a2.push(id);
+                }
+            }
+            s1 += a1.join(",")
+            s2 += a2.join(",");
+        }
+        return res + s1 + "|" + s2.substr(1);
     }
+    /**
+     * ScriptAnalysis done
+     * @param str rows be splited by ";""
+     */
     public ScriptAnalysis(str: string): boolean {
         let l1 = str.split("|"), rN: number, rows: Array<string>, strRCom: Array<string> = l1[1].split(";");
         rN = parseInt((rows = l1[0].split(";")).shift());
-        if(rN!=rows.length||rN!=strRCom.length){console.error("rN!=rows.length||rN!=strRCom.length");return false;}
-        rows.forEach(r=>{
-
-        });
-        strRCom.forEach(rc=>{
-
-        });
+        if (rN != rows.length || rN != strRCom.length) { console.error("rN!=rows.length||rN!=strRCom.length"); return false; }
+        for (let i = 0; i < rows.length; i++) {
+            let r = rows[i], rc = strRCom[i]
+                , rowEle = this.CreateNewRows(r.split(","))
+                , colEles = rowEle.querySelectorAll(".DC-Col")
+            rc.split(",").forEach((id, index) => {
+                if (!id) return;
+                let com = Patterns.Composit.Get(c => (c as Draggable).sign == id)[0] as Draggable
+                let ele = com.ComponentEntity();
+                colEles[index].appendChild(ele);
+                colEles[index].classList.add("full");
+            })
+            this.SetRowClass(rowEle)
+        }
         return true;
+    }
+
+    private CreateNewRows(ColSpan: number | any[]): HTMLDivElement {
+        let div = document.createElement("div");
+        div.classList.add("row");
+        div.classList.add("empty");
+        div.style.height = this.RowHeight + "px";
+        let count = Math.floor(12 / ((typeof ColSpan === "number") ? ColSpan : ColSpan.length));
+        for (let i = 0; i < count; i++) {
+            div.appendChild(this.GenerateCol(((typeof ColSpan === "number") ? ColSpan : parseInt(ColSpan[i]))));
+        }
+        this.Element.appendChild(div);
+        return div;
     }
 }

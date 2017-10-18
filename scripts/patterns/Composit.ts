@@ -16,8 +16,12 @@ export abstract class Composit extends ObserverableWMediator implements IComposi
     public Parent: IComposit
     private Children: Array<IComposit> = []
     private static Coms: Array<IComposit> = [];
-    public static Get(id: string): IComposit {
-        return this.GetViaFunction(c => c.Id == id)[0];
+    /**
+     * Get
+     * @param filter can be Id or filter function
+     */
+    public static Get(filter: string|((com:IComposit)=>boolean)): IComposit {
+        return this.GetViaFunction((typeof filter==="string")?c => c.Id == filter:filter)[0];
     }
     private static GetViaFunction(fn:(com:IComposit)=>boolean):Array<IComposit>{
       return  this.Coms.filter(c => fn(c));
