@@ -10,6 +10,6 @@
         "../scripts/UI/Editor/VinciDropDownList.ts",
         "../scripts/Plugins/DraggableComponent.ts",
         "../examples/Darggable_Main.ts",
-        "../../Protal/HomePage/Nav_Main.ts" //EAM 要进行分离
+        "../examples/Nav_Main.ts" 
     ]
 }

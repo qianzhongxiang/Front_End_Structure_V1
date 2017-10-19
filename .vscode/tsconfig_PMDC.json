@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "AMD",
+        "sourceMap": true
+    },
+    "files": [
+        "../../Protal/HomePage/Nav_Main.ts" ,
+        "../../Protal/HomePage/Darggable_Main.ts"
+    ]
+}

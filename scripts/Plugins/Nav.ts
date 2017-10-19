@@ -26,7 +26,7 @@ export class Nav {
         let nav = this.NavElement = document.createElement("nav");
         nav.classList.add("navbar", "navbar-expand-lg", "navbar-light", "bg-light")
         this.Element.appendChild(nav)
-        nav.innerHTML = '<a class="navbar-brand" href="' + (this.options.brandUrl || "javescript:void(0);") + '">' + brand + '</a>';
+        nav.innerHTML = '<a class="navbar-brand" href="' + (this.options.brandUrl || "javescript:void(0);") + '" target="'+(this.options.target?this.options.target.name:"")+'">' + brand + '</a>';
         let btn = document.createElement("button");
         btn.classList.add("navbar-toggler");
         btn.type = "button";
