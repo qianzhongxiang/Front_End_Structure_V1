@@ -27,6 +27,7 @@ export class VinciWindow<OptionsT extends IVinciWindowOptions> extends VinciLaye
         if (this.Wrapper.parentNode)
             this.Wrapper.parentNode.removeChild(this.Wrapper)
         this.Wrapper = document.createElement("div");
+        this.Wrapper.style.color="black";
         let dialog = document.createElement("div");
         dialog.classList.add("modal-dialog")
         let content = document.createElement("div");
@@ -43,6 +44,10 @@ export class VinciWindow<OptionsT extends IVinciWindowOptions> extends VinciLaye
     private GenerateHeader(): HTMLDivElement {
         let header = document.createElement("div");
         header.classList.add("modal-header");
+        let h4 = document.createElement("h4");
+        h4.classList.add("modal-title")
+        h4.innerText = this.Options.Title;
+        header.appendChild(h4)
         let button = document.createElement("button");
         button.type = "button";
         button.classList.add("close");
@@ -50,10 +55,6 @@ export class VinciWindow<OptionsT extends IVinciWindowOptions> extends VinciLaye
         button.innerHTML = '<span aria-hidden="true">&times;</span>';
         button.onclick = this.Close.bind(this);
         header.appendChild(button);
-        let h4 = document.createElement("h4");
-        h4.classList.add("modal-title")
-        h4.innerText = this.Options.Title;
-        header.appendChild(h4)
         return header;
     }
     private GenerateContent(): HTMLDivElement {

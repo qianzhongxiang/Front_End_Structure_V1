@@ -1,35 +1,76 @@
 import { Extend } from './Extend';
+enum ContentType{
+    json="application/json"
+    // "form"="multipart/form-data; charset=utf-8; boundary=something"
+}
+
+interface options {
+    url: string
+    data?: any
+    async?: boolean
+    method?: string
+    contentType?: "json" | "form"
+}
 export class Ajax {
     private oAjax: XMLHttpRequest
-    constructor(public options: { url: string, data?: any, async?: boolean, method?: string }) {
-        this.options=Extend(this.options, { async: true, method: "GET" })
+    constructor(public options: options) {
+        this.options = Extend(this.options, { async: true, method: "POST", contentType: "form" })
         this.configOAjax()
     }
-    done(fn?: (data) => void) {
-        let that = this;
-        if (fn)
-            that.oAjax.onreadystatechange = () => {
-                if (that.oAjax.readyState == 4)
-                    if (that.oAjax.status == 200)
-                        fn(that.distillData());
-                    else alert("failure");
-            }
-        that.oAjax.open(that.options.method, that.options.url, that.options.async);
-        that.oAjax.send(that.options.data);
+    done(fn?: (data) => void, err?: (code: number) => void) {
+        this.oAjax.onreadystatechange = () => {
+            if (this.oAjax.readyState == 4)
+                if (this.oAjax.status == 200)
+                    fn && fn(this.distillData());
+                else err && err(this.oAjax.status)
+        }
+        this.oAjax.open(this.options.method, this.options.url, this.options.async);
+        if(ContentType[this.options.contentType])this.oAjax.setRequestHeader("Content-Type",ContentType[this.options.contentType]);
+        this.oAjax.send(this.PostDataConvert(this.options.contentType,this.options.data));
+    }
+    private PostDataConvert(type: string, data: any): any {
+        if (!data) return data;
+        let res
+        switch (type) {
+            case "json":
+                if(typeof data==="string"){res=data;break;}
+                res= JSON.stringify(data)
+                break;
+            case "form":
+                if (data instanceof FormData) { res = data; break; }
+                res = new FormData();
+                if (typeof data === "string") {
+                    data.split("&").forEach(item => {
+                        let i = item.split("=")
+                        res.append(i[0], i[1])
+                    })
+                }
+                else if (typeof data === "object") {
+                    for (let n in data) {
+                        if ((data as Object).hasOwnProperty(n))
+                            res.append(n, (typeof data[n] === "string") ? data[n] : JSON.stringify(data[n]))
+                    }
+                }
+
+                break;
+            default:
+                break;
+        }
+        return res;
     }
     private configOAjax() {
         if (window["XMLHttpRequest"]) this.oAjax = new XMLHttpRequest();
         else this.oAjax = new ActiveXObject("Microsoft.XMLHTTP"); //为兼容IE6
     }
     private distillData(): any {
-        let type:string;
-        try{
-            type= this.oAjax.getResponseHeader("Content-Type")
+        let type: string;
+        try {
+            type = this.oAjax.getResponseHeader("Content-Type")
         }
-        catch(e){
+        catch (e) {
             console.log(e);
         }
-        if (type.indexOf("application/json;")!=-1)
+        if (type.indexOf("application/json;") != -1)
             return JSON.parse(this.oAjax.responseText);
         else
             return this.oAjax.responseText;
