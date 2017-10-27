@@ -26,7 +26,7 @@ export class Nav {
         let nav = this.NavElement = document.createElement("nav");
         nav.classList.add("navbar", "navbar-expand-lg", "navbar-light", "bg-light")
         this.Element.appendChild(nav)
-        nav.innerHTML = '<a class="navbar-brand" href="' + (this.options.brandUrl || "javescript:void(0);") + '" target="'+(this.options.target?this.options.target.name:"")+'">' + brand + '</a>';
+        nav.innerHTML = '<a class="navbar-brand" href="' + (this.options.brandUrl || "javescript:void(0);") + '" target="' + (this.options.target ? this.options.target.name : "") + '">' + brand + '</a>';
         let btn = document.createElement("button");
         btn.classList.add("navbar-toggler");
         btn.type = "button";
@@ -83,11 +83,23 @@ export class Nav {
             data.children.forEach(c => {
                 let sa = document.createElement("a");
                 sa.classList.add("dropdown-item");
-                sa.href = c.url;
+                sa.href = c.url||"javascript:void(0);";
                 sa.target = target;
                 sa.innerText = c.title;
                 div.appendChild(sa);
             })
         return li;
+    }
+    public SetCurrentUser(options: IMenuData, onclick?: (e:MouseEvent) => void): void {
+        let ul = this.GenerateUL([options])
+        ul.classList.add("navbar-right")
+        if(onclick){
+           let lias= ul.querySelectorAll("li a"),l=lias.length;
+            for (let i = 0; i < l; i++) {
+                let ele = lias[i] as HTMLAnchorElement;
+                ele.onclick=onclick;
+            }
+        }
+        this.NavElement.appendChild(ul);
     }
 }

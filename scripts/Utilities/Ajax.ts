@@ -1,7 +1,11 @@
 import { Extend } from './Extend';
-enum ContentType{
-    json="application/json"
-    // "form"="multipart/form-data; charset=utf-8; boundary=something"
+// enum ContentType{  //vs 2017 ts 15.4 中不可指定string 类型enum
+//     json = "application/json"
+//     // "form"="multipart/form-data; charset=utf-8; boundary=something"
+// }
+class ContentType{
+    static readonly json = "application/json"
+    // static readonly form="multipart/form-data; charset=utf-8; boundary=something"
 }
 
 interface options {
