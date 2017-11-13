@@ -1,7 +1,7 @@
 
 /**
 * singleton
-* @param fn {Function|ObjectConstructor} Function must return something, and this returns will be single.
+* @param fn {Function|ObjectConstructor} 
 * @param isClass
 * @param classArgs
 */
