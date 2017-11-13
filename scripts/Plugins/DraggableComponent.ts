@@ -92,7 +92,7 @@ export class Draggable extends Patterns.Composit {
             return this.component.Element;
         else return this.Wrapper;
     }
-    private DropIntoTrashCan() {
+    public DropIntoTrashCan(){
 
     }
 }
