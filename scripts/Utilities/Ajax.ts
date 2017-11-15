@@ -3,12 +3,12 @@ import { Extend } from './Extend';
 //     json = "application/json"
 //     // "form"="multipart/form-data; charset=utf-8; boundary=something"
 // }
-class ContentType{
+abstract class ContentType{
     static readonly json = "application/json"
     // static readonly form="multipart/form-data; charset=utf-8; boundary=something"
 }
 
-interface options {
+export interface Options {
     url: string
     data?: any
     async?: boolean
@@ -17,18 +17,19 @@ interface options {
 }
 export class Ajax {
     private oAjax: XMLHttpRequest
-    constructor(public options: options) {
+    constructor(public options: Options) {
         this.options = Extend(this.options, { async: true, method: "POST", contentType: "form" })
         this.configOAjax()
     }
-    done(fn?: (data) => void, err?: (code: number) => void) {
+    done(fn?: (data:any,code?:number,oAjax?:XMLHttpRequest) => void, err?: (code: number,oAjax?:XMLHttpRequest) => void) {
         this.oAjax.onreadystatechange = () => {
             if (this.oAjax.readyState == 4)
-                if (this.oAjax.status == 200)
-                    fn && fn(this.distillData());
-                else err && err(this.oAjax.status)
+                if (this.oAjax.status >= 200&&this.oAjax.status<300)
+                    fn && fn(this.distillData(),this.oAjax.status,this.oAjax);
+                else err && err(this.oAjax.status,this.oAjax);
         }
         this.oAjax.open(this.options.method, this.options.url, this.options.async);
+        
         if(ContentType[this.options.contentType])this.oAjax.setRequestHeader("Content-Type",ContentType[this.options.contentType]);
         this.oAjax.send(this.PostDataConvert(this.options.contentType,this.options.data));
     }

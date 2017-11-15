@@ -2,9 +2,12 @@ export abstract class ScriptsHelper {
     static Load(url: string,onload?:(this:HTMLElement,event:Event)=>any) {
         let script = document.createElement("script");
         script.async = false;
+        script.type="text/javascript";
         script.setAttribute('src', url + '?' + 'time=' + Date.parse(new Date().toString()));
         script.onload=onload;
-        document.head.appendChild(script);
+        var div=document.createElement("div");
+        div.appendChild(script);
+        document.head.appendChild(div);
     }
 }
 
