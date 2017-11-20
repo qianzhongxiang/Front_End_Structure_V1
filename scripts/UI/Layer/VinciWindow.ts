@@ -22,7 +22,7 @@ export class VinciWindow<OptionsT extends IVinciWindowOptions> extends VinciLaye
             let c = this.Remove(this.GetChild(this.MODELLAYER));
             if (c) c.Destroy();
         }
-        this.MODELLAYER = this.Add(new VinciModalLayer()).Id;
+        this.MODELLAYER = this.Add(new VinciModalLayer(undefined, { opacity:0.4 })).Id;
 
         if (this.Wrapper.parentNode)
             this.Wrapper.parentNode.removeChild(this.Wrapper)

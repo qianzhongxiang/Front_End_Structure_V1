@@ -13,8 +13,8 @@ export let Post = (options: Options) => {
 
 //DONN
 SuccessCallback = function(data: { IsSuccess: boolean, Message: string, Data: any },code:number,oAjax:XMLHttpRequest) {
-    let opt = this as Options
-    if(oAjax.responseURL.indexOf("/Home/Login/FrameToLogin")!=-1){
+    let opt = this as Options,url:string
+    if(url=oAjax.getResponseHeader("OutlineRedirectory")){
         ReLocation(oAjax.responseURL);
     }
     if (data && data.IsSuccess !== undefined) {

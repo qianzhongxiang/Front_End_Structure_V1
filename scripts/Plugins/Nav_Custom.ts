@@ -77,7 +77,8 @@ class MenuItem {
                 that.element.onmouseover = () => that.selected({ sender: that })
                 break;
             case 2:
-                that.element.onclick = () => that.selected({ sender: that })
+                that.element.addEventListener("click",e =>that.selected({ sender: that }))
+                // that.element.onclick = () => that.selected({ sender: that })
                 break;
         }
     }
@@ -113,7 +114,6 @@ class DDLMenuItem extends MenuItem {
             e.stopPropagation();
             that.open();
         }
-        document.addEventListener("click", (e) => that.close())
     }
     public open() {
         let items = document.querySelectorAll(".v_menuDLL_popup.activity")
@@ -153,6 +153,9 @@ class Menu {
         that.dataSource.Success = (e) => that.build();
         that.dataSource.Read();
         //document.body["onresize"] = () => that.build();
+        document.addEventListener("click", (e) => {
+            that.userInfo.close()
+        })
     }
     private build(): HTMLDivElement {
         let that = this, options = that.options
@@ -165,6 +168,7 @@ class Menu {
         if (!that.userInfo) that.initUserInfo(options.userInfo, false)
         that.decorate(that.menuElement, that.menuItems, that.suprMore = new DDLMenuItem({ title: "MORE" }, undefined))  //需要缩小宽度
         if (that.userInfo) that.element.appendChild(that.userInfo.build());
+       
         if (!that.winResizeEvent) window.addEventListener("resize", that.winResizeEvent = that.decorate.bind(that, that.menuElement, that.menuItems, that.suprMore))
         return this.element;
     }
@@ -196,8 +200,8 @@ class Menu {
         }
     }
     private leafClick(e: { sender: MenuItem }) {
-
         if (this.click) this.click(e)
+        this.userInfo.close()
     }
     private showSecItems(e: { sender: MenuItem }) {
         let that = this, options = that.options
@@ -406,7 +410,7 @@ export class MainPage extends MainPageLayout {
         let that = this;
         that.page = new TabPage(that.content);
         that.menu.click = (e) => {
-            if (that.page.TabCount() >= that.TabCount) { alert("At large remaining " + that.TabCount + " tab pages."); return; }
+            if (that.page.TabCount() >= that.TabCount) { alert("At most remaining " + that.TabCount + " tabs."); return; }
             let sender = e.sender, dataItem = e.sender.dataItem
             if (sender.parent instanceof DDLMenuItem) { that.UserInfoOperate(sender) } //User Information click event is different from other level 2 buttons.
             that.page.add({ title: dataItem.title, url: dataItem.url, id: dataItem.id }).click()
