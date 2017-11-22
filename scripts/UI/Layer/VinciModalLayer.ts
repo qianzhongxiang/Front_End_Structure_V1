@@ -9,7 +9,7 @@ export class VinciModalLayer<OptionsT extends Options> extends VinciLayerBase<Op
         ele.classList.add("modal-backdrop");
         ele.classList.add("fade");
         ele.classList.add("in");
-        if (options.opacity) ele.style.opacity = options.opacity.toString();
+        if (options&&options.opacity) ele.style.opacity = options.opacity.toString();
         super(ele, options);
     }
 }

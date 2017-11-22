@@ -108,9 +108,15 @@ class DDLMenuItem extends MenuItem {
         if (that.children) that.children.forEach(item => that.popup.appendChild(item.build()))
         return that.wrapper;
     }
+    private FindAncestor(el, cls) {
+    while ((el = el.parentElement) && !el.classList.contains(cls));
+    return el;
+}
     protected selectEvent() {
         let that = this;
         that.wrapper.onclick = (e) => {
+            let ele = e.target as HTMLElement;
+            if (this.FindAncestor(ele,"v_menuDLL_popup")) return;
             e.stopPropagation();
             that.open();
         }
@@ -125,6 +131,7 @@ class DDLMenuItem extends MenuItem {
         this.popup.classList.add("activity");
     }
     public close() {
+        if (this.popup)
         this.popup.classList.remove("activity");
     }
     public remove() {
@@ -154,7 +161,9 @@ class Menu {
         that.dataSource.Read();
         //document.body["onresize"] = () => that.build();
         document.addEventListener("click", (e) => {
-            that.userInfo.close()
+            if (that.suprMore) that.suprMore.close();
+            if (that.secMore) that.secMore.close();
+            if (that.userInfo) that.userInfo.close();
         })
     }
     private build(): HTMLDivElement {
@@ -163,7 +172,7 @@ class Menu {
         if (!that.menuElement) {
             that.element.appendChild(that.menuElement = document.createElement("div"));
             that.menuElement.classList.add("v_menu_menu");
-            that.menuElement.style.width = "calc( 100% - " + USERINFOWIDTH + "px)";
+            that.menuElement.style.width = "calc( 100% - " + (USERINFOWIDTH+2) + "px)";
         }
         if (!that.userInfo) that.initUserInfo(options.userInfo, false)
         that.decorate(that.menuElement, that.menuItems, that.suprMore = new DDLMenuItem({ title: "MORE" }, undefined))  //需要缩小宽度

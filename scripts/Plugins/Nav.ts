@@ -90,9 +90,10 @@ export class Nav {
             })
         return li;
     }
-    public SetCurrentUser(options: IMenuData, onclick?: (e:MouseEvent) => void): void {
+    public SetCurrentUser(options: IMenuData, onclick?: (e: MouseEvent) => void): void {
+
         let ul = this.GenerateUL([options])
-        ul.classList.add("navbar-right")
+        //ul.classList.add("justify-content-end")
         if(onclick){
            let lias= ul.querySelectorAll("li a"),l=lias.length;
             for (let i = 0; i < l; i++) {
@@ -100,6 +101,7 @@ export class Nav {
                 ele.onclick=onclick;
             }
         }
-        this.NavElement.appendChild(ul);
+        //this.NavElement.appendChild(ul);
+        this.NavElement.getElementsByTagName("ul")[0].appendChild(ul.children[0])
     }
 }

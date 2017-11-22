@@ -7,7 +7,7 @@ import { VinciModalLayer } from './VinciModalLayer';
  */
 export let VinciLoading = (ele: HTMLElement, enable: boolean = true) => {
     if (enable) {
-        let vm = new VinciModalLayer();
+        let vm = new VinciModalLayer(undefined, { opacity: 0.8 });
         //TODO add icon
         let span=document.createElement("span");
         span.classList.add("fa","fa-spinner","fa-spin","align-middle","fa-5x");
@@ -16,7 +16,6 @@ export let VinciLoading = (ele: HTMLElement, enable: boolean = true) => {
         vm.Wrapper.appendChild(span);
         vm.Wrapper.style.textAlign="center";
         vm.Element.style.backgroundColor="gray";
-        vm.Element.style.opacity="0.8";
         ele.dataset["vmId"] = vm.Id;
         vm.Open();
     }
