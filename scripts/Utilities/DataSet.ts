@@ -30,25 +30,35 @@ export let GetValue = (obj: Object, path: string) => {
         value = value[array[i]];
     }
     return value;
+    
 };
 
 export interface IConfigManager {
     /**field: name? {string} 支持路径形式：obj.Name 不是拷贝内容 小心修改*/
     GetConfig(name?: string)
+    /**
+     * SetPath
+     */
+    SetPath(path: string)
 }
 /**
- * ConfigManager 请使用 单例模式  {IConfigManager}
+ * ConfigManager 请使用 单例模式 GetConfigManager  {IConfigManager}
  */
 export class ConfigManager implements IConfigManager {
+    private path = "/config.json"
     private config: Object
     private Deserialize(): void {
-        new Ajax({ url: "/config.json", async: false, method: "GET" }).done((d) => {
-            this.config = d;//JSON.parse(d);
+        new Ajax({ url: this.path, async: false, method: "GET" }).done((d) => {
+            if(!d)console.log("empty config");
+            this.config = typeof d ==="string"?JSON.parse(d):d;
         });
     }
     public GetConfig(name?: string): Object {
         if (!this.config) this.Deserialize();
         return name ? GetValue(this.config, name) : this.config;
+    }
+    public SetPath(path: string) {
+        if (path)this.path = path;
     }
 }
 
@@ -60,8 +70,8 @@ export interface IUserSetings extends IObseverable {
 /**
  * UserSettings 请使用 单例模式 {IUserSetings}
  */
-export class UserSettings extends Observerable implements IUserSetings{
-    
+export class UserSettings extends Observerable implements IUserSetings {
+
 }
 
 export let GetConfigManager: () => IConfigManager = Singleton(ConfigManager, true)
