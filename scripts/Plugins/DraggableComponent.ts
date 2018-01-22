@@ -17,7 +17,7 @@ export class Draggable extends Patterns.Composit {
      * @param sign unique mark for saving
      * @param component real showing content
      */
-    constructor(public Element: HTMLElement, public sign: string, private component?: { Element: HTMLElement, Destroy?: () => void }) {
+    constructor(public Element: HTMLElement, public sign: number, private component?: { Element: HTMLElement, Destroy?: () => void }) {
         super()
         this.Wrapper = document.createElement("div");
         this.Wrapper.draggable = true;
@@ -430,7 +430,7 @@ export class DraggableContainer extends Patterns.Composit {
                 , colEles = rowEle.querySelectorAll(".DC-Col")
             rc.split(",").forEach((id, index) => {
                 if (!id) return;
-                let com = Patterns.Composit.Get(c => (c as Draggable).sign == id)[0] as Draggable
+                let com = Patterns.Composit.Get(c => (c as Draggable).sign.toString() == id)[0] as Draggable
                 let ele = com.ComponentEntity();
                 colEles[index].appendChild(ele);
                 colEles[index].classList.add("full");

@@ -11,7 +11,7 @@ export let Singleton = (fn: Function | ObjectConstructor, isClass?: boolean, ...
         return function () {
             return result || (result = new (fn as ObjectConstructor)(classArgs));
         }
-    return function () { //不能改写成 ()=> 形式
+    return function (this) { //不能改写成 ()=> 形式
         return result || (result = (fn as Function).apply(this, classArgs));
     }
 }

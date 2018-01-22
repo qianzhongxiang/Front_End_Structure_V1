@@ -36,7 +36,7 @@ export abstract class Layout {
         if (d) d.style.height = "calc(100% - " + h + "px)";
     }
 }
-class MenuItem {
+export class MenuItem {
     public element: HTMLDivElement
     public children: Array<MenuItem> = []
     public parent: MenuItem
@@ -145,7 +145,7 @@ export interface IMenuData {
     id?: string
     children?: Array<IMenuData>
 }
-class Menu {
+export class Menu {
     public dataSource: DataSource
     private menuItems: Array<MenuItem>
     private menuElement: HTMLDivElement
@@ -240,7 +240,7 @@ class Menu {
     }
 }
 
-class TabPageItem {
+export class TabPageItem {
     public tabElement: HTMLDivElement
     public iframe: HTMLIFrameElement
     public tabPage: TabPage
@@ -310,7 +310,7 @@ class TabPageItem {
         }
     }
 }
-class TabPage {
+export class TabPage {
     private tpItems: Array<TabPageItem> = []
     private tabsDiv: HTMLDivElement
     private iframeContainer: HTMLDivElement
@@ -388,7 +388,7 @@ class TabPage {
 }
 
 
-class MainPageLayout extends Layout {
+export class MainPageLayout extends Layout {
     protected superMenu: HTMLDivElement
     protected secondMenu: HTMLDivElement
     protected content: HTMLDivElement

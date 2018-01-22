@@ -1,5 +1,5 @@
 import { VinciLayerBase } from './VinciLayerBase';
-interface Options {
+export interface Options {
     /**0<=opacity<=1*/
     opacity: number
 }

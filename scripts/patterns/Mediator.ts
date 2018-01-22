@@ -5,7 +5,7 @@ export interface IMediator {
     Change(subject, type?)
     Unregister(subject, fn: Function, type?)
 }
-class MediaNode extends DS.LNode {
+export class MediaNode extends DS.LNode {
     public Type: string
 }
 export abstract class Mediator implements IMediator {

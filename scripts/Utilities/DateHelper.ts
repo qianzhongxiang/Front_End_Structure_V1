@@ -29,11 +29,11 @@ class ISODateStandar implements IDateStandar {
         return target.getFullYear();
     }
 }
-class DateStandars extends Patterns.SimplyFactory<IDateStandar> {
-    private iso: IDateStandar = Patterns.Singleton(ISODateStandar, true)
-}
-/**时间日期标准s  { Generate(name: string):System.DateEx.IDateStandar}  name:["iso"]*/
-export let DateStandar: () => {
-    /**时间日期标准s  { Generate(name: string):System.DateEx.IDateStandar}  name:["iso"]*/
-    Generate(name: string): System.DateEx.IDateStandar
-} = Patterns.Singleton(DateStandars, true);
+// class DateStandars extends Patterns.SimplyFactory<IDateStandar> {
+//     private iso: IDateStandar = Patterns.Singleton(ISODateStandar, true)
+// }
+// /**时间日期标准s  { Generate(name: string):System.DateEx.IDateStandar}  name:["iso"]*/
+// export let DateStandar: () => {
+//     /**时间日期标准s  { Generate(name: string):System.DateEx.IDateStandar}  name:["iso"]*/
+//     Generate(name: string): System.DateEx.IDateStandar
+// } = Patterns.Singleton(DateStandars, true);

@@ -1,0 +1,30 @@
+{
+  "name": "Front_End_Structure_V1",
+  "version": "1.0.0",
+  "description": "1.0.0",
+  "main": "index.js",
+  "directories": {
+    "example": "examples"
+  },
+  "dependencies": {
+    "@types/gridstack": "0.0.39",
+    "@types/jquery": "^3.2.18",
+    "gridstack": "^0.3.0",
+    "jquery": "^3.3.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qianzhongxiang/Front_End_Structure_V1.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/qianzhongxiang/Front_End_Structure_V1/issues"
+  },
+  "homepage": "https://github.com/qianzhongxiang/Front_End_Structure_V1#readme"
+}

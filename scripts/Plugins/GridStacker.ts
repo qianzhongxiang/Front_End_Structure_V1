@@ -1,12 +1,13 @@
+// ///<reference path="jquery.d.ts"/>
 import { Draggable } from './DraggableComponent';
 import { ObserverableWMediator } from './../Patterns/ObserverableWithMediator';
-
-/**
- * GridStacker 需要引用第三方库 gridstack.min.js including jquery。。。
- */
+import * as $ from 'jquery'
+// declare interface JQuery<HTMLElement> {
+//     gridstack(options?: any) : any;
+//  }
 export class GridStacker extends ObserverableWMediator {
     private _edited: boolean = false;
-    private Items: Array<{ x: number, y: number, w: number, h: number, id: string }> = [];
+    private Items: Array<{ x: number, y: number, w: number, h: number, id: number }> = [];
     private Coms: Array<Draggable> = []
     public Events = { DropItem:"DropItem"}
     public get Edited(): boolean {
@@ -30,7 +31,7 @@ export class GridStacker extends ObserverableWMediator {
         com.Element.addEventListener("click", this.AddWidget.bind(this, com, 0, 0, 4, 4));
     }
     
-    public DropItem(id: string): boolean {
+    public DropItem(id: number): boolean {
         if (!id) { console.log("GridStacker.Remove:id is " + id); return false; }
         let i = this.Coms.filter(c => c.sign == id)[0];
         if (!i) { console.log("GridStacker.Remove:conresponded com is " + i); return false; }
@@ -76,7 +77,7 @@ export class GridStacker extends ObserverableWMediator {
         //DragenterEvent
         //DragendEvent
         //Draggable components Destroion
-        $(this.Element).data("gridstack").destory();
+        $(this.Element).data("gridstack").destroy();
     }
 
     /**
@@ -97,7 +98,7 @@ export class GridStacker extends ObserverableWMediator {
         let it = $(this.Element).data("gridstack").addWidget(item, x, y, w, h, ap, undefined, undefined, undefined, undefined, el.sign);
         $("<i class='fa fa-trash fa-2x' style='cursor:pointer;right:10px;position:absolute;color: gray;' aria-hidden='true'></i>")[this.Edited?"show":"hide"]().on("click", (e) => {
             e.preventDefault();
-            $(this.Element).data("gridstack").removeWidget(it)
+            $(this.Element).data("gridstack").removeWidget(it[0])
             this.DropItem(it.data("gsId"));
         }).appendTo(it)
         this.Items.push({ x: it.data("gsX"), y: it.data("gsY"), h: it.data("gsHeight"), w: it.data("gsWidth"), id: el.sign });
@@ -109,7 +110,7 @@ export class GridStacker extends ObserverableWMediator {
     public ScriptAnalysis(str: string): boolean {
         let gs=$(this.Element).data("gridstack");
         gs.removeAll();
-        let array: Array<{ x: number, y: number, w: number, h: number, id: string }> = JSON.parse(str);
+        let array: Array<{ x: number, y: number, w: number, h: number, id: number }> = JSON.parse(str);
         if (array) this.Items = [];
         array.forEach(i => {
             let item = this.Coms.filter(c => c.sign == i.id)[0]

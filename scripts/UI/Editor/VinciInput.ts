@@ -21,7 +21,7 @@ export class VinciInput<OptionsT extends any> extends VinciEditorBase<OptionsT> 
         super.SetValue(value)
     }
     public Destroy(){
-        if(this.InputChangeEvent){this.Element.removeEventListener(this.InputChangeEvent);delete this.InputChangeEvent;}
+        if(this.InputChangeEvent){this.Element.removeEventListener("change",this.InputChangeEvent);delete this.InputChangeEvent;}
         super.Destroy();
     }
 }

@@ -3,9 +3,20 @@
         "target": "es5",
         "module": "AMD",
         "sourceMap": true,
-        "outdir":"./dist",
+        "outDir": "./../dist",
+        "noImplicitAny": false,
+        "strictNullChecks": false,
+        "skipLibCheck": true,
         "strict": true,
         "declaration": true
-    }
-
+    },
+    "include": [
+        "./../**/*"
+    ]
+    // "files": [
+    //     "./../**/*"
+    // ]
+    // "exclude": [
+    //     "./dist"
+    // ]
 }
