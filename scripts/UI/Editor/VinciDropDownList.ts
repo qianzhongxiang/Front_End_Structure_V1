@@ -23,7 +23,7 @@ export class VinciDropDownList<OptionsT> extends VinciEditorBase<IVinciDropDownL
             this.Wrapper = document.createElement("div");
         if (!this.Wrapper.classList.contains("dropdown")) this.Wrapper.classList.add("dropdown");
         if (this.WrapperClickEvent)
-        this.Wrapper.removeEventListener(this.WrapperClickEvent);
+        this.Wrapper.removeEventListener("click",this.WrapperClickEvent);
         this.Wrapper.addEventListener("click", this.WrapperClickEvent || (this.WrapperClickEvent = this.WrapperClick.bind(this)), true);
         (this.Element as HTMLButtonElement).type = "button";
         this.Element.dataset.toggle = "dropdown";
@@ -37,7 +37,7 @@ export class VinciDropDownList<OptionsT> extends VinciEditorBase<IVinciDropDownL
         if (!ul.classList.contains("dropdown-menu"))
             ul.classList.add("dropdown-menu");
         if (this.UlClickEvent)
-            ul.removeEventListener(this.UlClickEvent);
+            ul.removeEventListener("click",this.UlClickEvent);
         ul.addEventListener("click", this.UlClickEvent || (this.UlClickEvent = this.Selected.bind(this)), true)
       
         if (this.Options.DataSource instanceof Utilities.DataSource)
@@ -71,11 +71,11 @@ export class VinciDropDownList<OptionsT> extends VinciEditorBase<IVinciDropDownL
     }
     public Destroy() {
         if (this.UlClickEvent) {
-            this.Wrapper.querySelector("ul").removeEventListener(this.UlClickEvent);
+            this.Wrapper.querySelector("ul").removeEventListener("click",this.UlClickEvent);
             delete this.UlClickEvent;
         }
         if (this.WrapperClickEvent) {
-            this.Wrapper.removeEventListener(this.WrapperClickEvent);
+            this.Wrapper.removeEventListener("click",this.WrapperClickEvent);
             delete this.WrapperClickEvent;
         }
         if (this.DataSource) delete this.DataSource;

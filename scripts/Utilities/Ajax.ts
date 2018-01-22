@@ -4,8 +4,9 @@ import { Extend } from './Extend';
 //     // "form"="multipart/form-data; charset=utf-8; boundary=something"
 // }
 abstract class ContentType{
-    static readonly json = "application/json"
-    // static readonly form="multipart/form-data; charset=utf-8; boundary=something"
+    static readonly json = "application/json; charset=utf-8"
+    static readonly form ="application/x-www-form-urlencoded"
+    static readonly formMulti="multipart/form-data; charset=utf-8; boundary=something"
 }
 
 export interface Options {
@@ -30,7 +31,8 @@ export class Ajax {
         }
         this.oAjax.open(this.options.method, this.options.url, this.options.async);
         
-        if(ContentType[this.options.contentType])this.oAjax.setRequestHeader("Content-Type",ContentType[this.options.contentType]);
+        if (ContentType[this.options.contentType]) this.oAjax.setRequestHeader("Content-Type", ContentType[this.options.contentType]);
+        this.oAjax.setRequestHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8");
         this.oAjax.send(this.PostDataConvert(this.options.contentType,this.options.data));
     }
     private PostDataConvert(type: string, data: any): any {
@@ -42,6 +44,17 @@ export class Ajax {
                 res= JSON.stringify(data)
                 break;
             case "form":
+                if (typeof data === "object") {
+                    let array = [];
+                    for (let n in data) {
+                        if ((data as Object).hasOwnProperty(n))
+                            array.push(n + "=" + data[n].toString());
+                    }
+                    res = array.join("&");
+                } else
+                    res = data;
+                break;
+            case "formMulti":
                 if (data instanceof FormData) { res = data; break; }
                 res = new FormData();
                 if (typeof data === "string") {
