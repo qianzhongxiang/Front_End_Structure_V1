@@ -5,7 +5,7 @@ export abstract class Cookie {
         document.cookie = c_name + "=" + encodeURIComponent(value) +
             ((expiredays == null) ? "" : ";expires=" + exdate.toUTCString())
     }
-    static get(c_name) {
+    static Get(c_name) {
         if (document.cookie.length > 0) {
             let c_start = document.cookie.indexOf(c_name + "=")
             if (c_start != -1) {

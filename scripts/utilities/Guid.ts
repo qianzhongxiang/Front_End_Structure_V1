@@ -11,4 +11,5 @@ export class Guid {
     public static Validate(str: string): boolean {
         return new RegExp(/^{?[\da-f]{8}(-[\da-f]{4}){4}[\da-f]{8}\}?$/i).test(str);
     }
+    public static Empty: string = '00000000-0000-0000-0000-000000000000'
 }

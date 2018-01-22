@@ -2,6 +2,10 @@
     "compilerOptions": {
         "target": "es5",
         "module": "AMD",
-        "sourceMap": true
+        "sourceMap": true,
+        "outdir":"./dist",
+        "strict": true,
+        "declaration": true
     }
+
 }
