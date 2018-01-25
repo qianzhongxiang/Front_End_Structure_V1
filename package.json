@@ -1,7 +1,7 @@
 {
-  "name": "Front_End_Structure_V1",
-  "version": "1.0.0",
-  "description": "Front_End_Structure_V1 1.0.0",
+  "name": "fes",
+  "version": "1.0.1",
+  "description": "Front_End_Structure_V1",
   "main": "dist/index.js",
   "types" : "dist/index.d.ts",
   "directories": {
