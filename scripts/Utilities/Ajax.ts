@@ -19,7 +19,7 @@ export interface Options {
 export class Ajax {
     private oAjax: XMLHttpRequest
     constructor(public options: Options) {
-        this.options = Extend(this.options, { async: true, method: "POST", contentType: "form" })
+        this.options = Extend({ async: true, method: "POST", contentType: "form" },this.options)
         this.configOAjax()
     }
     done(fn?: (data:any,code?:number,oAjax?:XMLHttpRequest) => void, err?: (code: number,oAjax?:XMLHttpRequest) => void) {

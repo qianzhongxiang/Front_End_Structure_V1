@@ -1,8 +1,9 @@
 {
   "name": "Front_End_Structure_V1",
   "version": "1.0.0",
-  "description": "1.0.0",
-  "main": "index.js",
+  "description": "Front_End_Structure_V1 1.0.0",
+  "main": "dist/index.js",
+  "types" : "dist/index.d.ts",
   "directories": {
     "example": "examples"
   },
@@ -12,8 +13,11 @@
     "gridstack": "^0.3.0",
     "jquery": "^3.3.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "typescript": "^2.7"
+  },
   "scripts": {
+    "build":"tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -21,7 +25,7 @@
     "url": "git+https://github.com/qianzhongxiang/Front_End_Structure_V1.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Qian Zhongxiang",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/qianzhongxiang/Front_End_Structure_V1/issues"
