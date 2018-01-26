@@ -5,7 +5,7 @@ export function Extend<T,U>(first: T, second: U): T & U {
         (<any>result)[id] = (<any>first)[id];
     }
     for (let id in second) {
-        if (second[id]) {
+        if (second[id]!==undefined) {
             //  if (!result.hasOwnProperty(id)) {
             (<any>result)[id] = (<any>second)[id];
         }
