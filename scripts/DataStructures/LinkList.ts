@@ -1,5 +1,7 @@
-export class LNode {
+export class NodeBase {
     Data: any
+}
+export class LNode extends NodeBase {
     Next: LNode
 }
 export class LinkList<T extends LNode> {
