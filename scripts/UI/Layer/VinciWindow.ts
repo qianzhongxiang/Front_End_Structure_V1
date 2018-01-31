@@ -6,12 +6,12 @@ export interface IVinciWindowOptions  {
     Title?: string
     // Align?:string
 }
-export class VinciWindow<OptionsT extends IVinciWindowOptions> extends VinciLayerBase<OptionsT> {
+export class VinciWindow extends VinciLayerBase<IVinciWindowOptions> {
     public MODELLAYER: string;
     protected get DefaultOptions(): IVinciWindowOptions {
         return { AutoDestory: true, Title: "My modal Window" }; //,Align:"center"
     }
-    constructor(element: HTMLDivElement, options?: OptionsT) {
+    constructor(element: HTMLDivElement, options?: IVinciWindowOptions) {
         super(element, options)
     }
     /**

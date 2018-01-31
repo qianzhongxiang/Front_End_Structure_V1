@@ -1,4 +1,3 @@
-import { IVinciDropDownListOptions } from './../UI/Editor/VinciDropDownList';
 import { ObserverableWMediator } from './ObserverableWithMediator';
 import * as Utilities from './../Utilities/Guid';
 

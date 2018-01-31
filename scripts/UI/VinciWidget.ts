@@ -8,7 +8,7 @@ export class VinciWidget<OptionsT> extends Patterns.Composit {
     constructor(public Element: HTMLElement, public Options:OptionsT = {} as OptionsT) {
         super();
         this.Wrapper = this.Element;
-        Utilities.Extend(this.Options, this.DefaultOptions)
+        this.Options=Utilities.Extend(this.DefaultOptions,this.Options)
         let className:string=this.constructor["name"];
         Element.dataset[className]=this.Id;
         this.Initialization();

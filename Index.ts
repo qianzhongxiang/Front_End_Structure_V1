@@ -9,7 +9,7 @@ export { IsMobile } from './scripts/Utilities/Mobile';
 export { Guid } from './scripts/Utilities/Guid';
 export { CssHelper, ScriptsHelper } from './scripts/Utilities/DocHelper';
 export { Cookie, GetValue, IConfigManager, ConfigManager, IUserSetings, UserSettings, GetConfigManager, GetUserSettings } from './scripts/Utilities/DataSet';
-export { VinciDropDownList, IVinciDropDownListOptions } from './scripts/UI/Editor/VinciDropDownList';
+export { VinciDropDown, IVinciDropDownOptions } from './scripts/UI/Editor/VinciDropDown';
 export { VinciEditorBase } from './scripts/UI/Editor/VinciEditorBase';
 export { VinciLayerBase } from './scripts/UI/Layer/VinciLayerBase';
 export { VinciModalLayer } from './scripts/UI/Layer/VinciModalLayer';

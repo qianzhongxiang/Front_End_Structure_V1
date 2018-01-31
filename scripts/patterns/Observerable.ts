@@ -13,7 +13,7 @@ export interface IObseverable {
 }
 export abstract class Observerable implements IObseverable {
     public Id:string
-    public Events:Object
+    public Events={}
     constructor() {
         this.Id = Utilities.Guid.NewId();
     }
