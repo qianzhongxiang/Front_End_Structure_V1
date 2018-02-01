@@ -44,14 +44,14 @@ export class VinciTable extends VinciWidget<IVinciTableOptions>{
     }
     private DblClick(e: MouseEvent) {
         let tr = (e.target as HTMLElement).closest('tr') as HTMLTableRowElement;
-        this.SetState(this.Events.OnDblclick, tr ? tr.dataset['item'] : undefined);
+        this.SetState(this.Events.OnDblclick, tr ? tr['dataItem'] : undefined);
     }
     private Draw() {
         let table = this.Table = document.createElement("table"),
             thead = document.createElement("thead"),
             htr = document.createElement('tr')
         thead.appendChild(htr);
-        table.classList.add("table",`mw-${this.Options.MaxWidth}`,`mh-${this.Options.MaxHeight}`);
+        table.classList.add("table",'table-hover',`mw-${this.Options.MaxWidth}`,`mh-${this.Options.MaxHeight}`);
         table.appendChild(thead);
         this.OrderNo(htr, "#");
         this.Checkbox(htr);
@@ -77,7 +77,7 @@ export class VinciTable extends VinciWidget<IVinciTableOptions>{
         }else tbody.innerHTML="";
         e.Data.forEach(d => {
             let btr = document.createElement('tr');
-            btr.dataset["item"] = d;
+            btr['dataItem'] = d;
             this.OrderNo(btr, (orderNo as number)++);
             this.Checkbox(btr);
             this.Options.Columns.forEach(col => {

@@ -27,28 +27,29 @@ export class VinciSearcher extends VinciEditorBase<IVinciDropDownListOptions>{
             (this.Element as HTMLInputElement).placeholder = "Search for..."
             this.Wrapper.appendChild(this.Element);
             this.Wrapper.classList.add("input-group");
-            let rSpan = document.createElement("span"),
+            let appendDiv = document.createElement("div"),
                 btn = document.createElement("button");
-            rSpan.classList.add("input-group-btn")
-            btn.classList.add("btn", 'btn-default');
-            btn.innerText="GO";
+                appendDiv.classList.add("input-group-append")
+            btn.classList.add("btn", 'btn-outline-secondary','fa','fa-search');
+            // btn.innerText="GO";
             btn.type = "button";
             btn.addEventListener("click",()=>{
                 if(!this.Window||!this.Window.Opened)this.Open()
                 else this.Close();
             })
-            rSpan.appendChild(btn)
-            this.Wrapper.appendChild(rSpan)
+            appendDiv.appendChild(btn)
+            this.Wrapper.appendChild(appendDiv)
         }
     }
     public Open() {
         let tDiv = document.createElement("div");
-        this.Table = new VinciTable(tDiv, { Columns: this.Options.Columns, DataSource: this.Options.DataSource });
+        this.Table = new VinciTable(tDiv, { Columns: this.Options.Columns, DataSource: this.Options.DataSource ,Dbclickable:true});
         this.Table.Bind(this.Table.Events.OnDblclick, (msg) => {
             if (msg.Value) {
                 (this.Element as HTMLInputElement).value = GetValue(msg.Value, this.Options.TextField).toString();
                 this.SetValue(GetValue(msg.Value, this.Options.ValueField));
             }
+            this.Window.Close();
         })
         this.Window = new VinciWindow(tDiv);
         this.Add(this.Table);

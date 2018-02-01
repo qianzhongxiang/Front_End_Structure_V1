@@ -30,7 +30,7 @@ export abstract class Composit extends ObserverableWMediator implements IComposi
         Composit.Coms.push(this);
     }
     public Add(Obj: IComposit): IComposit {
-        Obj.Parent = Obj;
+        Obj.Parent = this;
         if (!this.GetChild(Obj.Id))
             this.Children.push(Obj);
         return Obj;

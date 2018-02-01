@@ -6,9 +6,7 @@ export interface Options {
 export class VinciModalLayer<OptionsT extends Options> extends VinciLayerBase<OptionsT> {
     constructor(element?: HTMLDivElement, options?: OptionsT) {
         let ele = element || document.createElement("div");
-        ele.classList.add("modal-backdrop");
-        ele.classList.add("fade");
-        ele.classList.add("in");
+        ele.classList.add("modal-backdrop",'fade','in');
         if (options&&options.opacity) ele.style.opacity = options.opacity.toString();
         super(ele, options);
     }
