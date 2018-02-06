@@ -15,8 +15,9 @@ export { VinciLayerBase } from './scripts/UI/Layer/VinciLayerBase';
 export { VinciModalLayer } from './scripts/UI/Layer/VinciModalLayer';
 export { Composit } from './scripts/Patterns/Composit';
 export { Mediator } from './scripts/Patterns/Mediator';
-export { Observerable } from './scripts/Patterns/Observerable';
+export { Observerable,IObseverable } from './scripts/Patterns/Observerable';
 export { ObserverableWMediator } from './scripts/Patterns/ObserverableWithMediator';
 export { VinciLoading } from './scripts/UI/Layer/VinciLoading';
 export { Ajax } from './scripts/Utilities/Ajax';
 export { DataSource } from './scripts/Utilities/DataSource';
+

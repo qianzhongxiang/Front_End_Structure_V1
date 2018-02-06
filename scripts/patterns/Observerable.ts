@@ -7,6 +7,7 @@ export class ObserverMsg {
 }
 export interface IObseverable {
     Id:string
+    Events:object
     GetState(type: string);
     Bind(type: string, fn: (msg: ObserverMsg, ...parameters: any[]) => void, ownObj?: Object, ...otherData: any[])
     Once(type: string, fn: (msg: ObserverMsg, ...parameters: any[]) => void, ownObj?: Object, ...otherData: any[])
