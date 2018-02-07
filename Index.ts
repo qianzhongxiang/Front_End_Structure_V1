@@ -7,7 +7,7 @@ export { VinciDialog } from './scripts/UI/Layer/VinciDialog';
 export { Extend } from './scripts/Utilities/Extend';
 export { IsMobile } from './scripts/Utilities/Mobile';
 export { Guid } from './scripts/Utilities/Guid';
-export { CssHelper, ScriptsHelper } from './scripts/Utilities/DocHelper';
+export { CssHelper, ScriptsHelper ,LogHelper} from './scripts/Utilities/DocHelper';
 export { Cookie, GetValue, IConfigManager, ConfigManager, IUserSetings, UserSettings, GetConfigManager, GetUserSettings } from './scripts/Utilities/DataSet';
 export { VinciDropDown, IVinciDropDownOptions } from './scripts/UI/Editor/VinciDropDown';
 export { VinciEditorBase } from './scripts/UI/Editor/VinciEditorBase';

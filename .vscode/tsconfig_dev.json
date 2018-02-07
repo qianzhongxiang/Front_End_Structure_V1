@@ -3,7 +3,7 @@
         "target": "es5",
         "module": "AMD",
         "outDir": "./../dist",
-        "sourceMap": true
+        "sourceMap": false
     },
     "files": [
         "../scripts/UI/Layer/VinciModalLayer.ts",
