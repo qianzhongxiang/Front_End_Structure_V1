@@ -25,15 +25,17 @@ class ObserMediator extends Mediator {
 let mediator=new ObserMediator();
 
 export class ObserverableWMediator extends Observerable {
-    protected SetState(type: string,value?:any){
+    protected SetState(type: string,value?:any,change:boolean=false){
         if(value){
             let state=this.StateTable.filter(s=>s.type==type)[0];
             if(state){
-                if(value!==state.value)
-                {
+                if(change&&value===state.value){}
+                else{
                     mediator.Change(this,type,value);
+                    state.value=value;
                 }
-            }else{this.StateTable.push(state);
+            }else{
+                this.StateTable.push({type:type,value:value});
                 mediator.Change(this,type,value);
             }
         }else{
