@@ -43,7 +43,6 @@ export class VinciSearcher extends VinciEditorBase<IVinciSearcherOptions>{
                 appendDiv.classList.add("input-group-append")
             btn.classList.add("btn", 'btn-outline-secondary');//,'fa','fa-search'
             btn.innerHTML="<i class='fa fa-search'></i>"
-            btn.value="&nbsp";
             // btn.innerText="GO";
             btn.type = "button";
             btn.addEventListener("click",()=>{
@@ -56,6 +55,7 @@ export class VinciSearcher extends VinciEditorBase<IVinciSearcherOptions>{
     }
     public Open() {
         let tDiv = document.createElement("div");
+        tDiv.style.maxHeight="450px";
         this.Table = new VinciTable(tDiv, { Columns: this.Options.Columns, DataSource: this.Options.DataSource ,Dbclickable:true});
         this.Table.Bind(this.Table.Events.OnDblclick, (msg) => {
             if (msg.Value) {
