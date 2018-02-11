@@ -8,21 +8,21 @@ export interface IVinciSearcherEvents extends IVinciEditorBaseEvents{
     Opened: string
     Closed: string
 }
-export interface IVinciDropDownListOptions {
+export interface IVinciSearcherOptions {
     ValueField?: string
     TextField?: string
     DataSource?: DataSource
     Columns?: Array<IVinciTableCol>
 }
 //TODO inheriting vinciinput in the futrue
-export class VinciSearcher extends VinciEditorBase<IVinciDropDownListOptions>{
+export class VinciSearcher extends VinciEditorBase<IVinciSearcherOptions>{
     public Events:IVinciSearcherEvents=Extend( { Opened: 'opened', Closed: 'closed' }, this.Events)
     private Table: VinciTable
     private Window: VinciWindow
-    public get DefaultOptions(): IVinciDropDownListOptions {
+    public get DefaultOptions(): IVinciSearcherOptions {
         return { ValueField: "value", TextField: "text" ,Columns:[]}
     }
-    constructor(element: HTMLInputElement, options?: IVinciDropDownListOptions) {
+    constructor(element: HTMLInputElement, options?: IVinciSearcherOptions) {
         super(element, options);
     }
     protected Initialization() {
