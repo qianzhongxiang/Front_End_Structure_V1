@@ -1,18 +1,22 @@
 import { VinciWindow } from './../Layer/VinciWindow';
 import { VinciTable, IVinciTableCol } from './../Module/VinciTable';
 import { DataSource } from './../../Utilities/DataSource';
-import { VinciEditorBase } from "./VinciEditorBase";
+import { VinciEditorBase, IVinciEditorBaseEvents } from "./VinciEditorBase";
 import { GetValue } from '../../Utilities/DataSet';
-
+import { Extend } from '../../Utilities/Extend';
+export interface IVinciSearcherEvents extends IVinciEditorBaseEvents{
+    Opened: string
+    Closed: string
+}
 export interface IVinciDropDownListOptions {
     ValueField?: string
     TextField?: string
     DataSource?: DataSource
     Columns?: Array<IVinciTableCol>
 }
-
+//TODO inheriting vinciinput in the futrue
 export class VinciSearcher extends VinciEditorBase<IVinciDropDownListOptions>{
-    public Events: { Opened: 'opened', Closed: 'closed' }
+    public Events:IVinciSearcherEvents=Extend( { Opened: 'opened', Closed: 'closed' }, this.Events)
     private Table: VinciTable
     private Window: VinciWindow
     public get DefaultOptions(): IVinciDropDownListOptions {
@@ -24,7 +28,13 @@ export class VinciSearcher extends VinciEditorBase<IVinciDropDownListOptions>{
     protected Initialization() {
         if (this.Element == this.Wrapper) {
             this.Element.parentElement.insertBefore(this.Wrapper = document.createElement("div"), this.Element);
-            (this.Element as HTMLInputElement).placeholder = "Search for..."
+            let element=this.Element as HTMLInputElement;
+            element.placeholder = "Search for...";
+            element.type="search";
+            element.addEventListener("change",(e)=>{
+                if(!(e.target as HTMLInputElement).value)
+                this.SetValue(undefined);
+            })
             this.Wrapper.appendChild(this.Element);
             this.Wrapper.classList.add("input-group");
             let appendDiv = document.createElement("div"),

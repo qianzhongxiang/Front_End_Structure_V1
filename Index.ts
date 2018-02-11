@@ -1,3 +1,4 @@
+export { VinciSearcher } from './scripts/UI/Editor/VinciSearcher';
 export { Singleton } from './scripts/Patterns/Singleton';
 export { LinkList } from './scripts/DataStructures/LinkList';
 export { VinciWindow, IVinciWindowOptions } from './scripts/UI/Layer/VinciWindow';
