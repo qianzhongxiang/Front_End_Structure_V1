@@ -1,6 +1,6 @@
 {
   "name": "vincijs",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "description": "Front_End_Structure_V1",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
