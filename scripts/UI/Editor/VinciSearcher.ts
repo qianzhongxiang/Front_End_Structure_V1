@@ -31,6 +31,7 @@ export class VinciSearcher extends VinciEditorBase<IVinciSearcherOptions>{
             let element=this.Element as HTMLInputElement;
             element.placeholder = "Search for...";
             element.type="search";
+            element.classList.add("form-control")
             element.addEventListener("change",(e)=>{
                 if(!(e.target as HTMLInputElement).value)
                 this.SetValue(undefined);
@@ -41,6 +42,7 @@ export class VinciSearcher extends VinciEditorBase<IVinciSearcherOptions>{
                 btn = document.createElement("button");
                 appendDiv.classList.add("input-group-append")
             btn.classList.add("btn", 'btn-outline-secondary','fa','fa-search');
+            btn.value="&nbsp";
             // btn.innerText="GO";
             btn.type = "button";
             btn.addEventListener("click",()=>{
