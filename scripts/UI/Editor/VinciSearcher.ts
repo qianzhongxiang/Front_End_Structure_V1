@@ -42,7 +42,7 @@ export class VinciSearcher extends VinciEditorBase<IVinciSearcherOptions>{
                 btn = document.createElement("button");
                 appendDiv.classList.add("input-group-append")
             btn.classList.add("btn", 'btn-outline-secondary');//,'fa','fa-search'
-            btn.innerHTML="<i class='fa fa-search'></i>"
+            btn.innerHTML="<i class='fa fa-search'></i>&nbsp;"
             // btn.innerText="GO";
             btn.type = "button";
             btn.addEventListener("click",()=>{
