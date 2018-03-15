@@ -9,8 +9,8 @@ export class Input{
         div.appendChild(items)
         div.style.width="200px";
         document.body.appendChild(div);
-       let vinput= new VinciInput(input,{Type:"text",Columns:[{title:"name",field:"name"},{title:"code",field:"code"}]
-       ,AutoComplete:true,TextField:"name",ItemsArea:items,ValueField:"code",DataSource:new DataSource({Data:[{name:"1#",code:"1#"},{name:"2#",code:"2#"},{name:"3#",code:"3#"}]})})
+       let vinput= new VinciInput(input,{Type:"text",AutoParameters:{Columns:[{title:"name",field:"name"},{title:"code",field:"code"}]
+       ,TextField:"name",ItemsArea:items,ValueField:"code",DataSource:new DataSource({Data:[{name:"1#",code:"1#"},{name:"2#",code:"2#"},{name:"3#",code:"3#"}]})}})
        vinput.Bind(vinput.Events.Change,e=>{
            alert(`change:${e.Value}`)
        })

@@ -3,16 +3,17 @@ import { DataSource } from './../../Utilities/DataSource';
 import { VinciEditorBase, IVinciEditorBaseEvents } from './VinciEditorBase';
 import { IVinciTableCol,VinciTable } from '../Module/VinciTable';
 import { Extend } from '../../Utilities/Extend';
-export interface VinciInputOptions{
-    Type?:string
-    /**自动完成的字段 */
-    AutoComplete?:boolean
+export interface AutoParameters{
     Columns?: Array<IVinciTableCol>
     /**包含datasource 的容器 */
     ItemsArea?:HTMLDivElement
     DataSource?: DataSource
     ValueField?: string
     TextField?: string
+}
+export interface VinciInputOptions{
+    Type?:string
+    AutoParameters?:AutoParameters
 }
 export interface IVinciInputEvents extends IVinciEditorBaseEvents{
     OnDblclick:string
@@ -31,35 +32,35 @@ export class VinciInput<OptionsT extends VinciInputOptions> extends VinciEditorB
     protected Initialization(){
         let elem=this.Element as HTMLInputElement;
         elem.type = this.Options.Type;
-        if(this.Options.DataSource&&this.Options.AutoComplete){
+        if(this.Options.AutoParameters){
             this.InitAutoComplete();
         }
         else
         elem.addEventListener("change",this.InputChangeEvent||(this.InputChangeEvent=this.ValueChanged.bind(this)));
     }
     protected InitAutoComplete(){
-        let table=new VinciTable(this.Options.ItemsArea,{Columns:this.Options.Columns,DataSource:this.Options.DataSource});
+        let table=new VinciTable(this.Options.AutoParameters.ItemsArea,{Columns:this.Options.AutoParameters.Columns,DataSource:this.Options.AutoParameters.DataSource});
         table.Bind(table.Events.OnDblclick,e=>{
              if (e.Value) {
-            (this.Element as HTMLInputElement).value = GetValue(e.Value, this.Options.TextField).toString();
+            (this.Element as HTMLInputElement).value = GetValue(e.Value, this.Options.AutoParameters.TextField).toString();
             this.SetCurrentItems([e.Value]);
-            let value= GetValue(e.Value, this.Options.ValueField)
+            let value= GetValue(e.Value, this.Options.AutoParameters.ValueField)
             this.SetValue(value);
             this.SetState(this.Events.Change,value);
         }})
-        this.Options.DataSource.Success=(e)=>{
+        this.Options.AutoParameters.DataSource.Success=(e)=>{
             let filterValue=(this.Element as HTMLInputElement).value;
             let rightData=e.Data;
             if(filterValue)
             rightData=e.Data.filter(d=>
-                new RegExp(filterValue.toLowerCase()).test((GetValue(d,this.Options.TextField) as string).toLowerCase())
+                new RegExp(filterValue.toLowerCase()).test((GetValue(d,this.Options.AutoParameters.TextField) as string).toLowerCase())
             )
             table.SetDataSource(new DataSource({Data:rightData}));
         }
         this.Element.addEventListener("change",()=>{
-            this.Options.DataSource.Read();
+            this.Options.AutoParameters.DataSource.Read();
         });
-        if(this.Options.ItemsArea){
+        if(this.Options.AutoParameters.ItemsArea){
 
         }
     }
