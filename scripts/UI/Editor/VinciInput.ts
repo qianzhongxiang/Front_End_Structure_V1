@@ -4,12 +4,12 @@ import { VinciEditorBase, IVinciEditorBaseEvents } from './VinciEditorBase';
 import { IVinciTableCol,VinciTable } from '../Module/VinciTable';
 import { Extend } from '../../Utilities/Extend';
 export interface AutoParameters{
-    Columns?: Array<IVinciTableCol>
+    Columns: Array<IVinciTableCol>
     /**包含datasource 的容器 */
-    ItemsArea?:HTMLDivElement
+    ItemsArea:HTMLDivElement
     DataSource?: DataSource
-    ValueField?: string
-    TextField?: string
+    ValueField: string
+    TextField: string
 }
 export interface VinciInputOptions{
     Type?:string
@@ -21,6 +21,7 @@ export interface IVinciInputEvents extends IVinciEditorBaseEvents{
 export class VinciInput<OptionsT extends VinciInputOptions> extends VinciEditorBase<VinciInputOptions> {
     // public Events:IVinciInputEvents =Extend({OnDblclick: "OnDblclick"},this.Events);// Extend(super.Events,)
     private InputChangeEvent;
+    private Table:VinciTable
     protected get DefaultOptions(){
         return {Type:"text",AutoComplete:false}
     }
@@ -63,6 +64,10 @@ export class VinciInput<OptionsT extends VinciInputOptions> extends VinciEditorB
         if(this.Options.AutoParameters.ItemsArea){
 
         }
+    }
+    public SetDataSource(dataSource:DataSource){
+        this.Options.AutoParameters.DataSource=dataSource;
+        this.Table.SetDataSource(dataSource);
     }
     protected SetValue(value){
         (this.Element as HTMLInputElement).value=value;
