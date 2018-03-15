@@ -17,11 +17,11 @@ export interface IVinciTableOptions {
     /**
      * precentage
      */
-    MaxHeight?:number
-     /**
-     * precentage
-     */
-    MaxWidth?:number
+    MaxHeight?: number
+    /**
+    * precentage
+    */
+    MaxWidth?: number
 }
 export class VinciTable extends VinciWidget<IVinciTableOptions>{
     public Events = { OnDblclick: "OnDblclick" } // Extend(super.Events,)
@@ -29,7 +29,7 @@ export class VinciTable extends VinciWidget<IVinciTableOptions>{
     protected get DefaultOptions(): IVinciTableOptions {
         return {
             DataSource: new DataSource({ Data: [] }), Pageable: false, AutoLoad: true, Columns: [], Tooltip: false,
-            Dbclickable: false,MaxHeight:100,MaxWidth:100
+            Dbclickable: false, MaxHeight: 100, MaxWidth: 100
         };
     }
     constructor(element: HTMLDivElement, options?: IVinciTableOptions) {
@@ -42,21 +42,27 @@ export class VinciTable extends VinciWidget<IVinciTableOptions>{
             this.Table.addEventListener("dblclick", this.DblClick.bind(this));
         }
     }
+    public SetDataSource(dataSource: DataSource) {
+        this.Options.DataSource = dataSource;
+        this.Initialization();
+    }
     private DblClick(e: MouseEvent) {
         let tr = (e.target as HTMLElement).closest('tr') as HTMLTableRowElement;
         this.SetState(this.Events.OnDblclick, tr ? tr['dataItem'] : undefined);
     }
     private Draw() {
+        if (this.Table && this.Table.parentElement)
+            this.Table.parentElement.removeChild(this.Table);
         let table = this.Table = document.createElement("table"),
             thead = document.createElement("thead"),
             htr = document.createElement('tr')
         thead.appendChild(htr);
-        table.classList.add("table",'table-hover',`mw-${this.Options.MaxWidth}`,`mh-${this.Options.MaxHeight}`);
+        table.classList.add("table", 'table-hover', 'table-sm', `mw-${this.Options.MaxWidth}`, `mh-${this.Options.MaxHeight}`);
         table.appendChild(thead);
         this.OrderNo(htr, "#");
         this.Checkbox(htr);
         this.Options.Columns.forEach(col => {
-            htr.innerHTML += `<th scope='col'>${col.title||col.field}</th>`
+            htr.innerHTML += `<th scope='col'>${col.title || col.field}</th>`
         })
         this.Element.appendChild(table);
         if (this.Options.AutoLoad)
@@ -70,11 +76,11 @@ export class VinciTable extends VinciWidget<IVinciTableOptions>{
     }
     private DataProcess(e: { Sender: DataSource, Data: Array<any> }) {
         let orderNo = 1//if pager is existent 
-        ,tbody = this.Table.querySelector('tbody')
+            , tbody = this.Table.querySelector('tbody')
         if (!tbody) {
-            tbody= document.createElement("tbody")
+            tbody = document.createElement("tbody")
             this.Table.appendChild(tbody);
-        }else tbody.innerHTML="";
+        } else tbody.innerHTML = "";
         e.Data.forEach(d => {
             let btr = document.createElement('tr');
             btr['dataItem'] = d;

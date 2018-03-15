@@ -5,12 +5,7 @@
         "outDir": "./../dist",
         "sourceMap": false
     },
-    "files": [
-        "../scripts/UI/Layer/VinciModalLayer.ts",
-        "../scripts/UI/Layer/VinciWindow.ts",
-        "../scripts/UI/Editor/VinciDropDownList.ts",
-        "../scripts/Plugins/DraggableComponent.ts",
-        "../examples/Darggable_Main.ts",
-        "../examples/Nav_Main.ts"
+    "include":[
+        "./../**/*.ts"
     ]
 }

@@ -40,3 +40,38 @@ export abstract class LogHelper {
     }
 }
 
+export let CreateElement=<k extends keyof HTMLElementTagNameMap>(tagName:k,...classes:string[]):HTMLElementTagNameMap[k]=>{
+    let e=document.createElement(tagName);
+    e.classList.add(...classes)
+    return e;
+}
+
+export let SetAttributes=<k extends HTMLElement>(element:k,attributes:object):k=>{
+    for(let n in attributes){
+        element.setAttribute(n,attributes[n]);
+    }
+   return element;
+}
+
+export let SetStyles=<k extends HTMLElement>(element:k,styles:CSSStyleDeclaration):k=>{
+    for(let n in styles){
+        element.style[n]=styles[n];
+    }
+    return  element;
+}
+
+// export let Matchs=(element: HTMLElement,selector:string):boolean=>{
+//     return (element.matches || element.
+//     element.msMatchesSelector || 
+//     element.webkitMatchesSelector ||
+//     function(s) {
+//         var matches = (this.document || this.ownerDocument).querySelectorAll(s),
+//             i = matches.length;
+//         while (--i >= 0 && matches.item(i) !== this) {}
+//         return i > -1;            
+//     })(selector)
+// }
+
+// export let Closest=<k extends HTMLElement>(Element:k,selector:string):HTMLElement=>{
+
+// }

@@ -5,6 +5,13 @@ export interface IVinciEditorBaseEvents{
 }
 export abstract class VinciEditorBase<OptionsT> extends VinciWidget<OptionsT> {
     public Events:IVinciEditorBaseEvents=Extend({Change:"change"},this.Events);
+    private CurrentItems:Array<any>
+    public GetCurrentItems():any{
+        return this.CurrentItems||[];
+    }
+    protected SetCurrentItems(items:Array<any>){
+        this.CurrentItems=items;
+    }
     protected GetValue(): any {
         return this.Element.dataset.value;
     }
