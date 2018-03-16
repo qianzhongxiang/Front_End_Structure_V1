@@ -51,6 +51,12 @@ export class VinciInput<OptionsT extends VinciInputOptions> extends VinciEditorB
             this.SetState(this.Events.Change,value);
         }})
         if(this.Options.AutoParameters.DataSource)
+        this.SetSuccess()
+        this.Element.onchange=()=>{
+            this.Options.AutoParameters.DataSource.Read();
+        };
+    }
+    private SetSuccess(){
         this.Options.AutoParameters.DataSource.Success=(e)=>{
             let filterValue=(this.Element as HTMLInputElement).value;
             let rightData=e.Data;
@@ -60,13 +66,10 @@ export class VinciInput<OptionsT extends VinciInputOptions> extends VinciEditorB
             )
             this.Table.SetDataSource(new DataSource({Data:rightData}));
         }
-        this.Element.onchange=()=>{
-            this.Options.AutoParameters.DataSource.Read();
-        };
     }
     public SetDataSource(dataSource:DataSource){
         this.Options.AutoParameters.DataSource=dataSource;
-        this.Initialization();
+        this.SetSuccess();
     }
     protected SetValue(value){
         (this.Element as HTMLInputElement).value=value;
