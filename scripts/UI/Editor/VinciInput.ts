@@ -41,14 +41,16 @@ export class VinciInput<OptionsT extends VinciInputOptions> extends VinciEditorB
     }
     protected InitAutoComplete(){
         if(this.Table)this.Table.Destroy();
-        this.Table=new VinciTable(this.Options.AutoParameters.ItemsArea,{Columns:this.Options.AutoParameters.Columns,DataSource:this.Options.AutoParameters.DataSource});
+        this.Table=new VinciTable(this.Options.AutoParameters.ItemsArea,{
+            Columns:this.Options.AutoParameters.Columns
+            ,DataSource:this.Options.AutoParameters.DataSource
+        ,Dbclickable:true});
         this.Table.Bind(this.Table.Events.OnDblclick,e=>{
              if (e.Value) {
             (this.Element as HTMLInputElement).value = GetValue(e.Value, this.Options.AutoParameters.TextField).toString();
             this.SetCurrentItems([e.Value]);
             let value= GetValue(e.Value, this.Options.AutoParameters.ValueField)
             this.SetValue(value);
-            this.SetState(this.Events.Change,value);
         }})
         if(this.Options.AutoParameters.DataSource)
         this.SetSuccess()
@@ -70,6 +72,7 @@ export class VinciInput<OptionsT extends VinciInputOptions> extends VinciEditorB
     public SetDataSource(dataSource:DataSource){
         this.Options.AutoParameters.DataSource=dataSource;
         this.SetSuccess();
+        this.Table.SetDataSource(dataSource);
     }
     protected SetValue(value){
         (this.Element as HTMLInputElement).value=value;
