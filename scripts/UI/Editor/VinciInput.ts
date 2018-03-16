@@ -66,7 +66,7 @@ export class VinciInput<OptionsT extends VinciInputOptions> extends VinciEditorB
     }
     public SetDataSource(dataSource:DataSource){
         this.Options.AutoParameters.DataSource=dataSource;
-        this.Table.SetDataSource(dataSource);
+        this.Initialization();
     }
     protected SetValue(value){
         (this.Element as HTMLInputElement).value=value;
