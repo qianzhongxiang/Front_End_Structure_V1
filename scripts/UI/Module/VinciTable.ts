@@ -44,7 +44,8 @@ export class VinciTable extends VinciWidget<IVinciTableOptions>{
     }
     public SetDataSource(dataSource: DataSource) {
         this.Options.DataSource = dataSource;
-        this.Initialization();
+        this.Options.DataSource.Success = this.DataProcess.bind(this);
+        this.Options.DataSource.Read();
     }
     private DblClick(e: MouseEvent) {
         let tr = (e.target as HTMLElement).closest('tr') as HTMLTableRowElement;
