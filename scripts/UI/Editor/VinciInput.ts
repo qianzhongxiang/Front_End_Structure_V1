@@ -63,7 +63,7 @@ export class VinciInput<OptionsT extends VinciInputOptions> extends VinciEditorB
             let filterValue=(this.Element as HTMLInputElement).value;
             let rightData=e.Data;
             if(filterValue)
-            rightData=e.Data.filter(d=>
+                rightData=e.Data.filter(d=>
                 new RegExp(filterValue.toLowerCase()).test((GetValue(d,this.Options.AutoParameters.TextField) as string).toLowerCase())
             )
             this.Table.SetDataSource(new DataSource({Data:rightData}));
@@ -73,10 +73,6 @@ export class VinciInput<OptionsT extends VinciInputOptions> extends VinciEditorB
         this.Options.AutoParameters.DataSource=dataSource;
         this.SetSuccess();
         this.Options.AutoParameters.DataSource.Read();
-    }
-    protected SetValue(value){
-        (this.Element as HTMLInputElement).value=value;
-        super.SetValue(value);
     }
     protected ValueChanged(e:Event){
         let value= (e.target as HTMLInputElement).value;

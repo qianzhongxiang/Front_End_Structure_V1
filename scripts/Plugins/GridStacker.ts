@@ -2,6 +2,7 @@
 import { Draggable } from './DraggableComponent';
 import { ObserverableWMediator } from './../Patterns/ObserverableWithMediator';
 import * as $ from 'jquery'
+
 // declare interface JQuery<HTMLElement> {
 //     gridstack(options?: any) : any;
 //  }
@@ -9,7 +10,7 @@ export class GridStacker extends ObserverableWMediator {
     private _edited: boolean = false;
     private Items: Array<{ x: number, y: number, w: number, h: number, id: number }> = [];
     private Coms: Array<Draggable> = []
-    public Events = { DropItem:"DropItem"}
+    public Events = { DropItem: "DropItem" }
     public get Edited(): boolean {
         return this._edited;
     }
@@ -30,7 +31,7 @@ export class GridStacker extends ObserverableWMediator {
         this.Coms.push(com);
         com.Element.addEventListener("click", this.AddWidget.bind(this, com, 0, 0, 4, 4));
     }
-    
+
     public DropItem(id: number): boolean {
         if (!id) { console.log("GridStacker.Remove:id is " + id); return false; }
         let i = this.Coms.filter(c => c.sign == id)[0];
@@ -59,18 +60,18 @@ export class GridStacker extends ObserverableWMediator {
                     b.h = i.height;
                 }
             });
-            }).on("enable", e => {
+        }).on("enable", e => {
 
-            }).on("disable", e => {
+        }).on("disable", e => {
 
-            })
-            //.on('removed', (e, items) => {
-            //    if (!items) return;
-            //    items.forEach(i => {
-            //        let b = this.Coms.filter(e => e.sign == i.id)[0]
-            //        b.DropIntoTrashCan();
-            //    });
-            //});
+        })
+        //.on('removed', (e, items) => {
+        //    if (!items) return;
+        //    items.forEach(i => {
+        //        let b = this.Coms.filter(e => e.sign == i.id)[0]
+        //        b.DropIntoTrashCan();
+        //    });
+        //});
     }
 
     public Destroy() {
@@ -86,7 +87,7 @@ export class GridStacker extends ObserverableWMediator {
     public ToString(): string {
         return JSON.stringify(this.Items);
     }
-    public AddWidget(el: Draggable, x, y, w, h,ap=true) {
+    public AddWidget(el: Draggable, x, y, w, h, ap = true) {
         if (this.Items.filter(i => i.id == el.sign)[0]) return;
         let item = document.createElement("div");
         if (el.Element.parentElement)
@@ -96,7 +97,7 @@ export class GridStacker extends ObserverableWMediator {
         content.classList.add("grid-stack-item-content")
         content.appendChild(el.ComponentEntity());
         let it = $(this.Element).data("gridstack").addWidget(item, x, y, w, h, ap, undefined, undefined, undefined, undefined, el.sign);
-        $("<i class='fa fa-trash fa-2x' style='cursor:pointer;right:10px;position:absolute;color: gray;' aria-hidden='true'></i>")[this.Edited?"show":"hide"]().on("click", (e) => {
+        $("<i class='fa fa-trash fa-2x' style='cursor:pointer;right:10px;position:absolute;color: gray;' aria-hidden='true'></i>")[this.Edited ? "show" : "hide"]().on("click", (e) => {
             e.preventDefault();
             $(this.Element).data("gridstack").removeWidget(it[0])
             this.DropItem(it.data("gsId"));
@@ -108,7 +109,7 @@ export class GridStacker extends ObserverableWMediator {
      * @param str rows be splited by ";""
      */
     public ScriptAnalysis(str: string): boolean {
-        let gs=$(this.Element).data("gridstack");
+        let gs = $(this.Element).data("gridstack");
         gs.removeAll();
         let array: Array<{ x: number, y: number, w: number, h: number, id: number }> = JSON.parse(str);
         if (array) this.Items = [];
@@ -117,7 +118,7 @@ export class GridStacker extends ObserverableWMediator {
             //let item = Composit.Get((c: Draggable) => c.sign == i.id) as Draggable;
             if (item) //TODO privilege filtering
             {
-                this.AddWidget(item, i.x, i.y, i.w, i.h,false);
+                this.AddWidget(item, i.x, i.y, i.w, i.h, false);
             }
         })
         gs.disable()
