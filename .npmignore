@@ -1,7 +1,5 @@
-*.js
-*.js.map
 !require.js
-src
+./src
 .gitignore
-*.ts
+./*.ts
 node_modules
