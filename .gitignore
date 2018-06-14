@@ -3,3 +3,4 @@
 !require.js
 dist
 node_modules
+*.tgz
