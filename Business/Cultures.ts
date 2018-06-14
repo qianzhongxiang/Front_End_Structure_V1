@@ -1,5 +1,5 @@
 import { Post } from "./Request";
-import { Cookie } from "../scripts/Utilities/DataSet";
+import { Cookie } from "../src/Utilities/DataSet";
 export class CultureInfo {
     private static LanageStorage: Object
     private static GetLanages() {

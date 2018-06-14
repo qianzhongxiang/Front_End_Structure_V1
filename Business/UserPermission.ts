@@ -1,4 +1,4 @@
-import { Ajax } from './../scripts/Utilities/Ajax';
+import { Ajax } from './../src/Utilities/Ajax';
 export class Permission {
     private static _permissions: Object = {}
     ///fn(moduleCode:string):Array<any> 
@@ -17,19 +17,19 @@ export class Permission {
         else allPermission = this._permissions[moduleCode || "current"]
         let result = false;
         if (allPermission) {
-           for (let i = 0; i < allPermission.length; i++)   if (result = this.matchCode(allPermission[i], pCod)) break
+            for (let i = 0; i < allPermission.length; i++)   if (result = this.matchCode(allPermission[i], pCod)) break
         }
         return result;
     }
 
 }
 
- ///用于 System.Permission 
- Permission.getPermissions = (mCode?) => {
-    let postData = {},res
+///用于 System.Permission 
+Permission.getPermissions = (mCode?) => {
+    let postData = {}, res
     if (mCode) postData["code"] = mCode
-    new Ajax({url:"/Utilities/GetButtonsByCode",data:postData,async:false,method:"POST"}).done(d=>{
-        res=d;
+    new Ajax({ url: "/Utilities/GetButtonsByCode", data: postData, async: false, method: "POST" }).done(d => {
+        res = d;
     });
     return res as Array<any>
 }
