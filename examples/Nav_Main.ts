@@ -1,6 +1,6 @@
-import { Ajax } from './../scripts/Utilities/Ajax';
-import { DataSource } from './../scripts/Utilities/DataSource';
-import { Nav, IMenuData } from './../scripts/Plugins/Nav';
+import { Ajax } from './../src/Utilities/Ajax';
+import { DataSource } from './../src/Utilities/DataSource';
+import { Nav, IMenuData } from './../src/Plugins/Nav';
 let MenuAdapter: (data: any) => Array<IMenuData> = (data: any) => {
     let result: Array<any> = [], id = 0;//id 本应使用d.IdPrivilege;
     (data as Array<any>).forEach(d => {
@@ -17,7 +17,7 @@ let ds = new DataSource({
     Read: p =>
         new Ajax({ url: "/Home/GerArchMenus_new", method: "POST" }).done(d => p.Success(MenuAdapter(d)))
 });
-let ifram=document.createElement("iframe");
-ifram.style.border="0";
-new Nav(document.body, { dataSource: ds, brand: "" ,brandUrl:"url",target:ifram})
+let ifram = document.createElement("iframe");
+ifram.style.border = "0";
+new Nav(document.body, { dataSource: ds, brand: "", brandUrl: "url", target: ifram })
 document.body.appendChild(ifram)
