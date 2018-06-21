@@ -1,3 +1,4 @@
+import { IsMobile } from './../../Utilities/Mobile';
 import { DataSource } from './../../Utilities/DataSource';
 import { Extend } from './../../Utilities/Extend';
 import { VinciWidget } from './../VinciWidget';
@@ -13,7 +14,6 @@ export interface IVinciTableOptions {
     AutoLoad?: boolean
     Columns?: Array<IVinciTableCol>
     Tooltip?: boolean | ((item: any, field: string) => string)
-    Dbclickable?: boolean
     /**
      * precentage
      */
@@ -24,12 +24,12 @@ export interface IVinciTableOptions {
     MaxWidth?: number
 }
 export class VinciTable extends VinciWidget<IVinciTableOptions>{
-    public Events = { OnDblclick: "OnDblclick" } // Extend(super.Events,)
+    public Events = { OnSelect: "OnSelect" } // Extend(super.Events,)
     private Table: HTMLTableElement
     protected get DefaultOptions(): IVinciTableOptions {
         return {
             DataSource: new DataSource({ Data: [] }), Pageable: false, AutoLoad: true, Columns: [], Tooltip: false,
-            Dbclickable: false, MaxHeight: 100, MaxWidth: 100
+            MaxHeight: 100, MaxWidth: 100
         };
     }
     constructor(element: HTMLDivElement, options?: IVinciTableOptions) {
@@ -38,18 +38,21 @@ export class VinciTable extends VinciWidget<IVinciTableOptions>{
     protected Initialization() {
         this.Options.DataSource.Success = this.DataProcess.bind(this);
         this.Draw();
-        if (this.Options.Dbclickable) {
-            this.Table.addEventListener("dblclick", this.DblClick.bind(this));
-        }
+        if (IsMobile.any())
+            this.Table.addEventListener("click", this.Select.bind(this))
+        else
+            this.Table.addEventListener("dblclick", this.Select.bind(this));
+
     }
     public SetDataSource(dataSource: DataSource) {
         this.Options.DataSource = dataSource;
         this.Options.DataSource.Success = this.DataProcess.bind(this);
         this.Options.DataSource.Read();
     }
-    private DblClick(e: MouseEvent) {
+    private Select(e: MouseEvent) {
         let tr = (e.target as HTMLElement).closest('tr') as HTMLTableRowElement;
-        this.SetState(this.Events.OnDblclick, tr ? tr['dataItem'] : undefined);
+        if (tr)
+            this.SetState(this.Events.OnSelect, tr ? tr['dataItem'] : undefined);
     }
     private Draw() {
         if (this.Table && this.Table.parentElement)
