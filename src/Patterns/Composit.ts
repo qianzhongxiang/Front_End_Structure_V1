@@ -13,19 +13,19 @@ export interface IComposit {
 export abstract class Composit extends ObserverableWMediator implements IComposit {
     public Id: string
     public Parent: IComposit
-    private Children: Array<IComposit> = []
+    protected Children: Array<IComposit> = []
     private static Coms: Array<IComposit> = [];
     /**
      * Get
      * @param filter can be Id or filter function
      */
-    public static Get(filter: string|((com:IComposit)=>boolean)): IComposit {
-        return this.GetViaFunction((typeof filter==="string")?c => c.Id == filter:filter)[0];
+    public static Get(filter: string | ((com: IComposit) => boolean)): IComposit {
+        return this.GetViaFunction((typeof filter === "string") ? c => c.Id == filter : filter)[0];
     }
-    private static GetViaFunction(fn:(com:IComposit)=>boolean):Array<IComposit>{
-      return  this.Coms.filter(c => fn(c));
+    private static GetViaFunction(fn: (com: IComposit) => boolean): Array<IComposit> {
+        return this.Coms.filter(c => fn(c));
     }
-    constructor(){
+    constructor() {
         super();
         Composit.Coms.push(this);
     }

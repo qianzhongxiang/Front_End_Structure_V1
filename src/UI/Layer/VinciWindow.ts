@@ -62,10 +62,10 @@ export class VinciWindow extends VinciLayerBase<IVinciWindowOptions> {
         let header = document.createElement("div");
         header.classList.add("modal-header");
         header.style.padding = "8px 1em";
-        let h4 = document.createElement("h4");
-        h4.classList.add("modal-title")
-        h4.innerText = this.Options.Title;
-        header.appendChild(h4)
+        let h5 = document.createElement("h5");
+        h5.classList.add("modal-title")
+        h5.innerText = this.Options.Title;
+        header.appendChild(h5)
         let button = document.createElement("button");
         button.type = "button";
         button.classList.add("close");
