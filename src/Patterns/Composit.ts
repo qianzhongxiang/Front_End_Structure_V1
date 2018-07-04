@@ -39,6 +39,9 @@ export abstract class Composit extends ObserverableWMediator implements IComposi
         if (!Obj) return;
         return this.Children.splice(this.Children.indexOf(Obj), 1)[0];
     }
+    public RemoveAll() {
+        this.Children = [];
+    }
     public GetChild(id: string): IComposit {
         if (!Utilities.Guid.Validate(id)) {
             console.log("id:" + id + " is not valid Guid ");
