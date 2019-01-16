@@ -1,17 +1,26 @@
+import { LogHelper } from "../Utilities/Index";
 
 /**
-* singleton
-* @param fn {Function|ObjectConstructor} 
-* @param isClass
-* @param classArgs
-*/
-export let Singleton = (fn: Function | ObjectConstructor, isClass?: boolean, ...classArgs: Array<any>): any => {
-    let result;
-    if (isClass)
-        return function () {
-            return result || (result = new (fn as ObjectConstructor)(classArgs));
+ * 
+ */
+export abstract class SingletonFactory {
+    private static constructors: { [k: string]: new (...parameters: any[]) => any } = {};
+    private static parameters: { [k: string]: any[] } = {};
+    private static instances: { [k: string]: any } = {};
+    static SetSingletonConstructor(name: string, _class: new (...parameters: any[]) => any, ...parameters: any[]) {
+        if (!name || !_class) {
+            LogHelper.Error('parameters is null or undefined');
         }
-    return function (this) { //不能改写成 ()=> 形式
-        return result || (result = (fn as Function).apply(this, classArgs));
+        if (this.constructors[name]) {
+            LogHelper.Error(`${name} is existed in SingletonFactory.constructors`);
+        }
+        this.constructors[name] = _class;
+        if (parameters) {
+            this.parameters[name] = parameters;
+        }
+    }
+    static GetSingleton<T>(name: string): T {
+        return this.instances[name] ||
+            (this.instances[name] = new this.constructors[name](this.parameters[name]));
     }
 }

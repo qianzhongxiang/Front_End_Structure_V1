@@ -1,5 +1,6 @@
-import { NodeBase } from './LinkList';
 import { LogHelper } from '../Utilities/DocHelper';
+import { NodeBase } from './LinkList';
+
 export class GNode extends NodeBase {
     private index: number
     public get Index(): number {

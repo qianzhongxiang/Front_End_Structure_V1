@@ -1,9 +1,10 @@
 {
   "name": "vincijs",
-  "version": "1.0.39",
-  "description": "Front_End_Structure_V1",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "version": "2.1.1",
+  "description": "js structure of front end",
+  "main": "dist/vinciJs.js",
+  "module": "index.ts",
+  "types": "dist/vinciJs.d.ts",
   "directories": {
     "example": "examples"
   },
@@ -14,11 +15,22 @@
     "jquery": "^3.3.1"
   },
   "devDependencies": {
-    "tslib": "^1.9.0",
-    "typescript": "^2.8.1"
+    "@types/jasmine": "^3.3.5",
+    "awesome-typescript-loader": "^5.2.1",
+    "dts-bundle": "^0.7.3",
+    "jasmine-core": "^3.3.0",
+    "karma": "^3.1.4",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-jasmine": "^2.0.1",
+    "karma-typescript": "^3.0.13",
+    "source-map-loader": "^0.2.4",
+    "tslib": "^1.9.3",
+    "typescript": "^3.2.2",
+    "webpack": "^4.28.4",
+    "webpack-cli": "^3.2.1"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

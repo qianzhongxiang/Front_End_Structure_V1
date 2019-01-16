@@ -4,7 +4,7 @@ export abstract class ScriptsHelper {
         script.async = false;
         script.type = "text/javascript";
         script.setAttribute('src', url + '?' + 'time=' + Date.parse(new Date().toString()));
-        script.onload = onload;
+        script.onload = onload as any;
         var div = document.createElement("div");
         div.appendChild(script);
         document.head.appendChild(div);
@@ -18,7 +18,7 @@ export abstract class CssHelper {
         link.rel = 'stylesheet';
         link.type = 'text/css';
         link.href = url;
-        link.onload = onload;
+        link.onload = onload as any;
         link.media = 'all';
         document.head.appendChild(link);
     }

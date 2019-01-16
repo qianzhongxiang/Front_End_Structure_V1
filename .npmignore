@@ -1,5 +1,4 @@
-!require.js
-/src
-.gitignore
-/*.ts
-node_modules
+*
+!dist/vinciJs.d.ts
+!dist/vinciJs.js
+!dist/vinciJs.js.map

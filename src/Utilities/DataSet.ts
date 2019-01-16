@@ -1,6 +1,5 @@
 import { Ajax } from "./Ajax";
 import { Observerable, IObseverable } from "../Patterns/Observerable";
-import { Singleton } from "../Patterns/Singleton";
 export abstract class Cookie {
     static Set(c_name, value, expiredays) {
         var exdate = new Date()
@@ -72,6 +71,3 @@ export interface IUserSetings extends IObseverable {
 export class UserSettings extends Observerable implements IUserSetings {
 
 }
-
-export let GetConfigManager: () => IConfigManager = Singleton(ConfigManager, true)
-export let GetUserSettings: () => IUserSetings = Singleton(UserSettings, true)
