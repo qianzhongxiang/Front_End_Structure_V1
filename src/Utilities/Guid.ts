@@ -1,4 +1,4 @@
-export class Guid {
+export abstract class Guid {
     private static s4() {
         return Math.floor((1 + Math.random()) * 0x10000)
             .toString(16)
@@ -11,5 +11,7 @@ export class Guid {
     public static Validate(str: string): boolean {
         return new RegExp(/^{?[\da-f]{8}(-[\da-f]{4}){4}[\da-f]{8}\}?$/i).test(str);
     }
-    public static Empty: string = '00000000-0000-0000-0000-000000000000'
+    public static Empty() {
+        return '00000000-0000-0000-0000-000000000000';
+    };
 }

@@ -1,4 +1,4 @@
-import { Ajax, AjaxOptions as AjaxOpts } from "../src/Utilities/Ajax";
+import { Ajax, AjaxOptions as AjaxOpts } from "../src/Utilities/Http";
 export interface Options extends AjaxOpts {
     onError?: (msg?: string, code?: number) => void;
     onSuccess?: (data?: any) => void;

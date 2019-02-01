@@ -1,4 +1,3 @@
-import { ObserverableWMediator } from './ObserverableWithMediator';
 import * as Utilities from './../Utilities/Guid';
 
 export interface IComposit {
@@ -10,7 +9,7 @@ export interface IComposit {
     Destroy()
 }
 
-export abstract class Composit extends ObserverableWMediator implements IComposit {
+export abstract class Composit implements IComposit {
     public Id: string
     public Parent: IComposit
     protected Children: Array<IComposit> = []
@@ -26,7 +25,6 @@ export abstract class Composit extends ObserverableWMediator implements IComposi
         return this.Coms.filter(c => fn(c));
     }
     constructor() {
-        super();
         Composit.Coms.push(this);
     }
     public Add(Obj: IComposit): IComposit {

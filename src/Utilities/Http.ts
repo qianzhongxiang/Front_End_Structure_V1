@@ -16,6 +16,10 @@ export interface AjaxOptions {
     method?: string
     contentType?: "json" | "form"
 }
+
+/**
+ * 
+ */
 export class Ajax {
     private oAjax: XMLHttpRequest
     constructor(public options: AjaxOptions) {
@@ -92,5 +96,103 @@ export class Ajax {
             return JSON.parse(this.oAjax.responseText);
         else
             return this.oAjax.responseText;
+    }
+}
+
+export class HttpRequestHeaderBuilder {
+    private header: HeadersInit = {}
+    WithJson() {
+        this.header['content-type'] = 'application/json';
+        return this;
+    }
+    Build(): HeadersInit {
+        return this.header;
+    }
+}
+/**
+ * HttpRequestConfigBuilder  HttpRequest初始参数构造器
+ */
+export class HttpRequestConfigBuilder {
+    private config: RequestInit = {};
+    private headersBuilder: HttpRequestHeaderBuilder;
+    constructor() {
+        this.headersBuilder = new HttpRequestHeaderBuilder();
+    }
+    /**
+     * WithCors : using cors with mode, 'same-origin' without invoking this method
+     * 启动跨域： 使用参数传递的模式进行跨域。未调用该方法则是same-origin
+     * 【注】隐私信息不会受影响，使用WithCredentials（）设置隐私信息传递方式
+     * @param mode 跨域模式 ，默认使用‘cors’模式 , by default is 'cors'
+     */
+    WithCors(mode?: RequestMode) {
+        this.config.mode = mode || 'cors';
+        return this;
+    }
+    /**
+     * WithCredentials : request with Credentials,  'omit' without invoking this method
+     * 启用隐私上传： cookie 等信息,未调用则默认是omit
+     * @param credentials 隐私信息上传方式, by default is 'same-origin'
+     */
+    WithCredentials(credentials?: RequestCredentials) {
+        this.config.credentials = credentials || 'same-origin';
+        return this;
+    }
+    /**
+     * WithJson: using json object as request body
+     * @param body can be `string` or {object}
+     */
+    WithJson(body: object | string) {
+        this.config.body = JSON.stringify(body);
+        this.headersBuilder.WithJson();
+        return this;
+    }
+    /**
+     * WithFormData: headers will filled up automatically
+     * @param body {FormData}
+     */
+    WithFormData(body: FormData) {
+        this.config.body = body;
+        return this;
+    }
+
+    /**
+     * 生成初始化参数 for HttpClient.Request method
+     */
+    Build(): RequestInit {
+        this.config.headers = this.headersBuilder.Build();
+        return this.config;
+    }
+
+    /**
+     * Set Post Method; 'Get' without invoking this method, By Defined
+     */
+    Post() {
+        this.config.method = 'POST';
+        return this;
+    }
+    /**
+     * 获取默认参数生成器： 'post'; 'same-origin credentials'; 'cors'
+     */
+    DefaultBuilder() {
+        this.Post().WithCors().WithCredentials();
+        return this;
+    }
+}
+
+/**
+ * 
+ */
+export class HttpClient {
+    Request(requestTarget: RequestInfo, config?: RequestInit): Promise<{ data: any, response: Response }> {
+        return fetch(requestTarget, config).then(response => { return { data: this.ResolveData(response), response: response } });
+    }
+    private ResolveData(response: Response): Promise<any> {
+        const contentType = response.headers.get('content-type');
+        switch (contentType) {
+            case 'application/json':
+                return response.json();
+            default:
+                return response.text();
+        }
     }
 }

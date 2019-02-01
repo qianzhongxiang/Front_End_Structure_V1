@@ -1,11 +1,10 @@
-import { Type } from './Type';
-export function Extend<T,U>(first: T, second: U): T & U {
-	let result = <T & U>{};
+export function Extend<T, U>(first: T, second: U): T & U {
+    let result = <T & U>{};
     for (let id in first) {
         (<any>result)[id] = (<any>first)[id];
     }
     for (let id in second) {
-        if (second[id]!==undefined) {
+        if (second[id] !== undefined) {
             //  if (!result.hasOwnProperty(id)) {
             (<any>result)[id] = (<any>second)[id];
         }

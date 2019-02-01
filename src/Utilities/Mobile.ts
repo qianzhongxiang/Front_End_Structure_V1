@@ -2,8 +2,8 @@
  * judge mobile
  * recit from https://www.abeautifulsite.net/detecting-mobile-devices-with-javascript edited by Cory LaViska
  */
-export class IsMobile {
-   static Android() {
+export abstract class Mobile {
+    static Android() {
         return navigator.userAgent.match(/Android/i);
     }
     static BlackBerry() {
@@ -18,7 +18,7 @@ export class IsMobile {
     static Windows() {
         return navigator.userAgent.match(/IEMobile/i);
     }
-    static any() {
+    static Any() {
         return (this.Android() || this.BlackBerry() || this.iOS() || this.Opera() || this.Windows());
     }
 };

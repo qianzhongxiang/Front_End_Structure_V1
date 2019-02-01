@@ -1,4 +1,4 @@
-import { Ajax } from "./Ajax";
+import { Ajax } from "./Http";
 import { Observerable, IObseverable } from "../Patterns/Observerable";
 export abstract class Cookie {
     static Set(c_name, value, expiredays) {

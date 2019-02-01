@@ -1,4 +1,4 @@
-import { LogHelper } from '../Utilities/DocHelper';
+import { LogHelper } from '../Utilities/LogHelper';
 import { NodeBase } from './LinkList';
 
 export class GNode extends NodeBase {

@@ -12,7 +12,8 @@
     "@types/gridstack": "0.0.39",
     "@types/jquery": "^3.2.18",
     "gridstack": "^0.3.0",
-    "jquery": "^3.3.1"
+    "jquery": "^3.3.1",
+    "moment": "^2.23.0"
   },
   "devDependencies": {
     "@types/jasmine": "^3.3.5",
@@ -21,6 +22,7 @@
     "jasmine-core": "^3.3.0",
     "karma": "^3.1.4",
     "karma-chrome-launcher": "^2.2.0",
+    "karma-coverage": "^1.1.2",
     "karma-jasmine": "^2.0.1",
     "karma-typescript": "^3.0.13",
     "source-map-loader": "^0.2.4",
@@ -31,7 +33,7 @@
   },
   "scripts": {
     "build": "webpack",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "karma start karma.conf.js"
   },
   "repository": {
     "type": "git",

@@ -34,3 +34,65 @@ console.log(SingletonFactory.GetSingleton<TestClass>('TestClass').value)
 
 ```
 
+
+# Utilities
+
+## HttpClient
+### why is HttpClient
+
+### usage
+``` ts
+import { HttpRequestConfigBuilder, HttpClient } from "../src/Utilities/Http";
+
+// create init parameters
+new HttpRequestConfigBuilder().WithCors('no-cors').WithCredentials('omit')
+    .WithFormData(new FormData()).Post();
+// or using DefaultBuilder with post;'same-origin credentials';'cors'
+const data = new HttpRequestConfigBuilder().DefaultBuilder().WithJson({});
+
+// launch request :发起一个请求
+new HttpClient().Request('url string', data.Build())
+    .then(d => {
+        d.data.info = 'I\'m json object from response data if resonse content type is "application/json" '
+        return d.data;
+    })
+    .then(d => {
+        console.log(JSON.stringify(d));
+    }).catch(e => {
+        console.log('show the error');
+    })
+
+//an anther method using Request object directly
+new HttpClient().Request(new Request('', {}))
+```
+
+
+## Guid
+### usage:
+``` ts
+import { Guid } from "../src/Utilities/Guid";
+
+// string
+Guid.Empty();
+
+// create a new guid
+Guid.NewId();
+
+// test a string is a guid
+Guid.Validate('')  //false
+Guid.Validate(Guid.NewId())  //true
+```
+
+## Type
+### usage:
+``` ts
+import { Type } from "../src/Utilities/Type";
+
+Type('')  //string
+Type({})  //object
+Type(function () { }) //function
+Type(new Date()) //date
+Type(22)  //number
+Type(/sss/)  //regexp
+Type([])  //array
+```

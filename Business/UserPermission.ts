@@ -1,4 +1,4 @@
-import { Ajax } from './../src/Utilities/Ajax';
+import { Ajax } from '../src/Utilities/Http';
 export class Permission {
     private static _permissions: Object = {}
     ///fn(moduleCode:string):Array<any> 

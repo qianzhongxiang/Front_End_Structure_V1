@@ -10,9 +10,6 @@ export class WebSocketor {
     constructor(private options: WebSocketorOptions) {
         this.options = Extend(this.options, { Reconnection: true, AutoReconnectInterval: 5000 });
     }
-    private Init() {
-
-    }
     public Open(onmessage?: (evt: MessageEvent) => void, onOpen?: () => void, onClose?: (closeEvent: CloseEvent) => void) {
         let ws: WebSocket = this.WebSocket = new WebSocket(this.options.Url);
         ws.onopen = () => {
