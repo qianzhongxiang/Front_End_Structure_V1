@@ -16,7 +16,53 @@ export interface AjaxOptions {
     method?: string
     contentType?: "json" | "form"
 }
+export interface IUrlObject {
+    GetParam: (key: string) => string;
+    SetParam: (key: string, value: string) => void;
+    toString: () => string;
+    GetHost: () => string;
+}
+class UrlObject implements IUrlObject {
+    private UrlObj: URL;
+    constructor(private url: string) {
+        this.UrlObj = new URL(url);
+    }
+    GetParam(key: string) {
+        return this.UrlObj.searchParams.get(key);
+    }
+    SetParam(key: string, value: string) {
+        const p = this.UrlObj.searchParams;
+        if (p.has(key)) {
+            p.append(key, value);
+        }
+        p.set(key, value);
+    }
+    SetParams(data: object) {
+        for (const key in data) {
+            if (data.hasOwnProperty(key)) {
+                this.SetParam(key, data[key].toString());
+            }
+        }
+    }
+    GetHost() {
+        return this.UrlObj.host;
+    }
 
+    toString() {
+        return this.UrlObj.toJSON();
+    }
+}
+export abstract class UrlHelper {
+    public static get Current() {
+        return new UrlObject(window.location.href);
+    }
+    public static Redirect(url: IUrlObject | string) {
+        window.location.assign(typeof url === 'string' ? url : url.toString());
+    }
+    public static CreateOne(url: string) {
+        return new UrlObject(url);
+    }
+}
 /**
  * 
  */
